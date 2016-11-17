@@ -1,0 +1,13 @@
+{
+  "jspm": {
+    "configFile": "src/config.js",
+    "dependencies": {
+      "qs": "npm:qs@^6.3.0",
+      "react": "npm:react@^15.3.2",
+      "react-dom": "npm:react-dom@^15.3.2"
+    },
+    "devDependencies": {
+      "typescript": "npm:typescript@^2.0.7"
+    }
+  }
+}
