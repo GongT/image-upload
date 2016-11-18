@@ -2,11 +2,12 @@
 	"name": "image-upload-client",
 	"version": "0.0.0",
 	"description": "",
-	"main": "./bundle.js",
+	"main": "./dist/index.js",
 	"scripts": {
-		"create-package": "cp -f ../src/public-define.ts ./src/ && tsc -p src && node create-config.js && npm pack"
+		"create-package": "cp -f ../src/public-define.ts ./src/ && tsc -p src && node create-config.js && dts-concat . > index.d.ts && npm pack"
 	},
 	"dependencies": {
+		"@gongt/dts-concat": "*",
 		"@types/node": "^6.0.45",
 		"@types/qs": "^6.2.30",
 		"fast-sha256": "^1.0.0",

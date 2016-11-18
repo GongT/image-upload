@@ -2,3 +2,4 @@
 bundle.js.map
 bundle.js
 public-define.ts
+index.d.ts

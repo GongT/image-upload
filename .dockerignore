@@ -2,6 +2,7 @@
 .git/
 .idea/
 .jsonenv/
+!.jsonenv/_current_result.json.d.ts
 logs/
 *.log
 npm-debug.log*
@@ -14,8 +15,9 @@ coverage/
 .grunt
 .lock-wscript
 build/Release
-node_modules/
-jspm_packages/
+**/node_modules/
+**/jspm_packages/
+**/dist/
 .npm
 .node_repl_history
 !.micro-build/packagejson

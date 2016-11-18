@@ -5,6 +5,7 @@
 		"target": "es6",
 		"lib": ["es6", "dom", "es2015.promise", "es7"],
 		"moduleResolution": "node",
+		"declaration": true,
 		"noEmitOnError": true,
 		"noImplicitThis": true,
 		"noImplicitAny": false,

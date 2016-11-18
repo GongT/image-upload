@@ -1,5 +1,3 @@
-///<reference path="../../globals.d.ts"/>
-
 import {sha256_file} from "./sha256_extra";
 import {SignApiResult, FileProperties} from "./public-define";
 
@@ -9,7 +7,7 @@ try {
 } catch (e) {
 }
 
-interface KeyValuePair {
+export interface KeyValuePair {
 	[id: string]: string;
 }
 
