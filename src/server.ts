@@ -18,7 +18,6 @@ export const app: express.Application & any = express();
 app.use(logger(':method :url :status - :response-time ms'));
 
 app.use('/server-package/package.tgz', serveStatic(resolve(__dirname, '../server-package/package.tgz')));
-console.error('package url is: %s', `${JsonEnv.upload.packageUrl}`);
 
 // enable cookies for pages, need to use before use router
 app.use(cookieParser(JsonEnv.cookieKey));

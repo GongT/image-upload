@@ -3,3 +3,4 @@ dist/
 .npmignore
 create-config.js
 build.Dockerfile
+build.sh

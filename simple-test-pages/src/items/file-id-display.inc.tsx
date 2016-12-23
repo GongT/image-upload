@@ -7,7 +7,7 @@ export class FileIdDisplay extends React.Component<{},undefined> {
 	render() {
 		let id;
 		try {
-			id = this.context.sign.file._id;
+			id = this.context.shareFile._id;
 		} catch (e) {
 		}
 		return <input

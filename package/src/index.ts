@@ -61,7 +61,8 @@ export class ImageUploadService {
 		if (fileObject.size > 1000 * 1000 * 500) {
 			return Promise.reject(new Error('file too large, must < 500kb'));
 		}
-		return sha256_file(fileObject).then((hash) => {
+		return <any> sha256_file(fileObject).then((hash) => {
+			console.log('hash file: %s', hash);
 			return this.api('post', 'sign-upload-url', {
 				mime: fileObject.type,
 				meta: metaData,
@@ -79,7 +80,8 @@ export class ImageUploadService {
 				'Content-Type': fileObject.type,
 			},
 		}).then(() => {
-			this.completeUploadFile(sign);
+			return this.completeUploadFile(sign);
+		}).then(() => {
 			return sign.file;
 		});
 	}
@@ -90,6 +92,7 @@ export class ImageUploadService {
 	
 	simpleUploadFile(fileObject: File, metaData: KeyValuePair = {}): Promise<FileProperties> {
 		return this.requestSignUrl(fileObject, metaData).then((sign: SignApiResult) => {
+			console.log('server sign file: %O', sign);
 			if (sign.complete) {
 				console.info('this file already uploaded.');
 				return sign.file;

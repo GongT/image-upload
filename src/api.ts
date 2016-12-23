@@ -92,7 +92,7 @@ router.post('/hold-file', (req, res, next) => {
 		return;
 	}
 	
-	const {id, holder, relatedId, serverHash,} = req.body;
+	const {id, holder, relatedId,} = req.body;
 	
 	uploadItemsModel.hold(true, id, {holder, relatedId});
 });
@@ -106,7 +106,7 @@ router.post('/release-file', (req, res, next) => {
 });
 
 function hold_release_check(req, next) {
-	const {id, holder, relatedId, serverHash,} = req.body;
+	const {id, holder, relatedId, serverHash} = req.body;
 	
 	if (!id) {
 		next(new Error('require param `id`'));

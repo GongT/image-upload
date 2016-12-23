@@ -1,13 +1,12 @@
 {
-	"name": "image-upload-client",
-	"version": "0.0.0",
+	"name": "@microduino-private/image-upload-client",
+	"version": "1.0.0",
 	"description": "",
 	"main": "./dist/index.js",
-	"scripts": {
-		"create-package": "cp -f ../src/public-define.ts ./src/ && tsc -p src && node create-config.js && dts-concat . > index.d.ts && npm pack"
-	},
 	"dependencies": {
+		"@gongt/make-next-private-version": "*",
 		"@gongt/dts-concat": "*",
+		"@gongt/jenv-data": "*",
 		"@types/node": "^6.0.45",
 		"@types/qs": "^6.2.30",
 		"fast-sha256": "^1.0.0",

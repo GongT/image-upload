@@ -16,8 +16,10 @@ build.baseImage('node');
 build.projectName(projectName);
 build.domainName(projectName + '.' + JsonEnv.baseDomainName);
 
-build.install('./package.json');
-build.install('./package/package.json');
+build.isInChina(JsonEnv.gfw.isInChina, JsonEnv.gfw);
+build.npmCacheLayer(JsonEnv.gfw.npmRegistry);
+build.npmInstall('./package.json');
+build.npmInstall('./package/package.json');
 
 build.forwardPort(80);
 
@@ -25,17 +27,17 @@ build.startupCommand('dist/boot.js');
 build.shellCommand('node');
 // build.stopCommand('stop.sh');
 
-// build.buildArgument('SOME_ARG', defaultValue);
-
-build.label('microbuild', 'yes');
-
-build.nsgLabel(ELabelNames.alias, []);
+build.specialLabel(ELabelNames.alias, []);
 
 build.addPlugin(EPlugins.jenv);
 
 build.addPlugin(EPlugins.typescript, {
 	source: 'src',
 	target: 'dist',
+});
+build.addPlugin(EPlugins.typescript, {
+	source: 'package/src',
+	target: 'package/dist',
 });
 
 build.environmentVariable('DEBUG', projectName + ':*');
@@ -48,13 +50,8 @@ if (!fs.existsSync(cache_host_path)) {
 build.volume(cache_host_path, '/data/temp');
 build.environmentVariable('FILE_CACHE_PATH', cache_host_path);
 
-// build.prependDockerFile('/path/to/docker/file');
-// build.appendDockerFile('/path/to/docker/file');
-
 if (JsonEnv.isDebug) {
 	build.dependService('accounts', 'ssh://git@git.microduino.cn:2222/website-v2/user-center.git');
 }
 
-build.buildArgument('user_center_package_url', 'use which user-center package', JsonEnv.accounts.packageUrl);
-build.prependDockerFile('install-user-center-package.Dockerfile');
 build.appendDockerFile('package/build.Dockerfile');

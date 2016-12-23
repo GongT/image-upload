@@ -24,10 +24,14 @@ export class TestFullUpload extends React.Component<{}, any> {
 		const p = this.context.api.simpleUploadFile(this.context.fileObject, this.state && this.context.meta);
 		
 		this.context.handlePromise(p);
+		
+		p.then((file) => {
+			this.context.updateContext({shareFile:file});
+		});
 	}
 	
 	render() {
-		const f = this.context.fileObject;
+		// const f = this.context.fileObject;
 		return <BS3PanelForm id="fullUpload"
 			styleClass={this.state ? this.state.style : 'default'}
 			title="完整上传逻辑"

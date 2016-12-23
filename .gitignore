@@ -1,24 +1,18 @@
-.git/
-.idea/
-.jsonenv/
-logs/
+### START MICRO-BUILD SECTION >>> 
+# DO NOT EDIT THIS BY HAND
+.*
+.tgz
+./node_modules
+./jspm_packages
+**/node_modules
+**/jspm_packages
 *.log
 npm-debug.log*
-pids/
-*.pid
-*.seed
-lib-cov/
 coverage/
-.nyc_output
-.grunt
-.lock-wscript
-build/Release
-node_modules/
-jspm_packages/
-typings/
-.npm
-.node_repl_history
-.micro-build/*
 !.micro-build/config.ts
-dist/
-temp/
+!.*ignore
+dist
+package/dist
+### <<< END MICRO-BUILD SECTION
+
+temp-image-upload/

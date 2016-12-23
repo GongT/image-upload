@@ -8,7 +8,7 @@ export function downloadFile({url, urlInternal}: FileProperties): Promise<void|B
 	const fileUrl = JsonEnv.isDebug? url : urlInternal;
 	debugCheck('check file: %s', fileUrl);
 	
-	return new Promise((resolve) => {
+	return new Promise<void|Buffer>((resolve) => {
 		request(fileUrl, {encoding: null}, (err, resp, body) => {
 			if (err) {
 				console.error('base.driver: http error: ', err);

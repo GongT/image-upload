@@ -1,6 +1,6 @@
 ///<reference path="../globals.d.ts"/>
 import "source-map-support/register";
-import "json-env-data/global";
+import "@gongt/jenv-data/global";
 
 export const APP_RUN_PORT: number = process.env.RUN_IN_DOCKER? 80 : JsonEnv.upload.debugPort || 80;
 
