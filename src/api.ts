@@ -14,9 +14,15 @@ function slashEnd(str) {
 }
 
 router.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Method', 'GET,POST');
+	res.header('Access-Control-Allow-Origin', req.header('Origin') || '*');
+	res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers'));
+	res.header('Access-Control-Max-Age', '31536000');
+	res.header('Access-Control-Allow-Methods', req.header('Access-Control-Request-Methods') || '*');
+	res.header('Access-Control-Allow-Credentials', 'true');
 	next();
+});
+router.options(/.*/, (req, res) => {
+	res.sendStatus(200);
 });
 
 const debugUpload = createDebug('api:upload');
@@ -94,7 +100,12 @@ router.post('/hold-file', (req, res, next) => {
 	
 	const {id, holder, relatedId,} = req.body;
 	
-	uploadItemsModel.hold(true, id, {holder, relatedId});
+	uploadItemsModel.hold(true, id, {holder, relatedId}).then((obj) => {
+		res.send({
+			status: 0,
+			file: obj,
+		});
+	}, next);
 });
 router.post('/release-file', (req, res, next) => {
 	if (hold_release_check(req, next)) {
@@ -102,7 +113,12 @@ router.post('/release-file', (req, res, next) => {
 	}
 	const {id, holder, relatedId,} = req.body;
 	
-	uploadItemsModel.hold(false, id, {holder, relatedId});
+	uploadItemsModel.hold(false, id, {holder, relatedId}).then((obj) => {
+		res.send({
+			status: 0,
+			file: obj,
+		});
+	}, next);
 });
 
 function hold_release_check(req, next) {

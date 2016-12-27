@@ -15,8 +15,16 @@ fi
 
 export PATH="${PATH}:./node_modules/.bin"
 
-node create-config.js
-dts-concat . > index.d.ts
+if [ "${REAL_IS_BUILDING}" = "yes" ]; then
+	node create-config.js
+else
+	cd ..
+	jenv node ./package/create-config.js
+	cd package
+fi
+
+jspm bundle-sfx dist/global.js dist/bundle.js --format global
+dts-concat "@microduino-private/image-upload-client" dist/index.d.ts > index.d.ts
 echo -e "\e[38;5;10mcompile ok...\e[0m"
 
 if [ "${REAL_IS_BUILDING}" = "yes" ]; then

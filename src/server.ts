@@ -5,7 +5,7 @@ import {resolve} from "path";
 import * as logger from "morgan";
 import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
-import {router} from "./api";
+import {router as ApiRouter} from "./api";
 import {createServer} from "http";
 import {APP_RUN_PORT} from "./boot";
 
@@ -23,7 +23,7 @@ app.use('/server-package/package.tgz', serveStatic(resolve(__dirname, '../server
 app.use(cookieParser(JsonEnv.cookieKey));
 // http method calls
 app.use(bodyParser.json()); // TODO
-app.use(router);
+app.use('/api', ApiRouter);
 
 app.use(serveStatic(resolve(__dirname, '../package/'), {etag: true}));
 

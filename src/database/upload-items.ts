@@ -3,8 +3,13 @@ import {ObjectSchema} from "./base";
 import {FileProperties, MyDocument, IHolder} from "../public-define";
 import {driver} from "../library/driver";
 import {createDebug} from "../debug";
-import {SchemaTypes, Document, DocumentQuery} from "mongoose";
+import {SchemaTypes, Document, Schema, DocumentQuery} from "mongoose";
 import {DiedFileError} from "../library/base.driver";
+
+const holderSchema = new Schema({
+	holder: String,
+	relatedId: String,
+}, {_id: false});
 
 export const UploadItemsSchema: ObjectSchema = {
 	url: {
@@ -36,10 +41,7 @@ export const UploadItemsSchema: ObjectSchema = {
 		required: false,
 	},
 	holders: {
-		type: [{
-			holder: String,
-			relatedId: String,
-		}],
+		type: [holderSchema],
 		default: [],
 	},
 };
@@ -133,18 +135,18 @@ export class UploadItems extends DataModel<FileProperties> {
 		});
 	}
 	
-	hold(isHold: boolean, id: string, who: IHolder) {
+	hold(isHold: boolean, id: string, {holder, relatedId}: IHolder): Promise<FileProperties> {
 		const update: any = {};
 		if (isHold) {
 			update.$addToSet = {
-				holders: who,
+				holders: {holder, relatedId},
 			};
 		} else {
-			update.$pullAll = {
-				holders: who,
+			update.$pull = {
+				holders: {holder, relatedId},
 			};
 		}
-		return this.model.findByIdAndUpdate(id, update);
+		return <any> this.model.findByIdAndUpdate(id, update);
 	}
 }
 

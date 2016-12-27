@@ -21,3 +21,6 @@ package/dist
 ### <<< END MICRO-BUILD SECTION
 
 temp-image-upload/
+package/browser.js
+package/node.js
+package/request-url.txt

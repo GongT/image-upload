@@ -3,7 +3,8 @@ import {SignApiResult, FileProperties} from "./public-define";
 
 declare const require: any;
 try {
-	require("source-map-support/register");
+	const x = require;
+	x("source-map-support/register");
 } catch (e) {
 }
 
@@ -12,12 +13,11 @@ export interface KeyValuePair {
 }
 
 import Qs = require('qs');
+import {fetch} from "./fetch";
 
-declare var window, global;
+declare const window, global;
 const g = typeof window === 'object'? window : global;
-const requestUrl = g.hasOwnProperty('IMAGE_UPLOAD_REQUEST_URL')
-	? slashEnd(g.IMAGE_UPLOAD_REQUEST_URL)
-	: slashEnd('{REQUEST_URL_AUTO_PLACE_HERE}');
+const requestUrl = slashEnd(g.IMAGE_UPLOAD_REQUEST_URL) + 'api/';
 
 const CONFIG_SERVER_HASH = (() => {
 	if (typeof window === 'object' || !global.hasOwnProperty('JsonEnv')) {
@@ -25,8 +25,6 @@ const CONFIG_SERVER_HASH = (() => {
 	}
 	return global.JsonEnv.upload.hashKey;
 })();
-
-declare const fetch: (...args: any[]) => Promise<any>;
 
 function slashEnd(str) {
 	return str.replace(/([^\/])$/, '$1/');
@@ -38,19 +36,23 @@ function noSlashStart(str) {
 export interface ServiceOptions {
 	serverHash?: string;
 	holder?: string;
-	projectName?: string;
+	projectName: string;
 }
+
+let fileObject;
 
 export class ImageUploadService {
 	private CONFIG_SERVER_HASH = CONFIG_SERVER_HASH;
 	private CONFIG_HOLDER = null;
 	
-	constructor(opt: ServiceOptions = {}) {
+	constructor(opt: ServiceOptions) {
 		if (opt.serverHash) {
 			this.CONFIG_SERVER_HASH = opt.serverHash;
 		}
 		if (opt.holder || opt.projectName) {
 			this.CONFIG_HOLDER = opt.holder || opt.projectName;
+		} else {
+			throw new TypeError('no projectName.')
 		}
 	}
 	
@@ -102,7 +104,40 @@ export class ImageUploadService {
 		});
 	}
 	
-	holdFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER, serverHash: string = this.CONFIG_SERVER_HASH) {
+	headlessUploadFile(metaData: KeyValuePair = {}): Promise<FileProperties> {
+		if (typeof window !== 'object') {
+			throw new TypeError(`Can't use headless upload on server.`);
+		}
+		if (typeof event !== 'object') {
+			throw new TypeError(`headless upload must call during click callback.`);
+		}
+		
+		const file: HTMLInputElement = <any> document.createElement('INPUT');
+		file.setAttribute('type', 'file');
+		// file.style.display='none';
+		
+		document.body.appendChild(file);
+		const p = new Promise((resolve, reject) => {
+			file.addEventListener('change', () => {
+				if (file.files && file.files[0]) {
+					const p1 = this.simpleUploadFile(file.files[0], metaData);
+					p1.then(resolve, reject);
+					const cb = destroy.bind(undefined, file);
+					p1.then(cb, cb)
+				} else {
+					reject();
+				}
+			});
+		});
+		file.click();
+		if (fileObject) {
+			destroy(fileObject);
+		}
+		fileObject = file;
+		return p;
+	}
+	
+	holdFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER, serverHash: string = this.CONFIG_SERVER_HASH): Promise<FileProperties> {
 		if (!holder) {
 			throw new Error('holdFile: `holder` param is required.');
 		}
@@ -111,10 +146,12 @@ export class ImageUploadService {
 			holder,
 			relatedId,
 			serverHash,
+		}).then((ret) => {
+			return ret.file;
 		});
 	}
 	
-	releaseFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER, serverHash: string = this.CONFIG_SERVER_HASH) {
+	releaseFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER, serverHash: string = this.CONFIG_SERVER_HASH): Promise<FileProperties> {
 		if (!holder) {
 			throw new Error('releaseFile: `holder` param is required.');
 		}
@@ -123,6 +160,8 @@ export class ImageUploadService {
 			holder,
 			relatedId,
 			serverHash,
+		}).then((ret) => {
+			return ret.file;
 		});
 	}
 	
@@ -182,5 +221,12 @@ export class ImageUploadService {
 				throw data;
 			}
 		});
+	}
+}
+
+function destroy(file: HTMLInputElement) {
+	document.body.removeChild(file);
+	if (fileObject === file) {
+		fileObject = null;
 	}
 }
