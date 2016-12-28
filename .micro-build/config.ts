@@ -20,6 +20,7 @@ build.isInChina(JsonEnv.gfw.isInChina, JsonEnv.gfw);
 build.npmCacheLayer(JsonEnv.gfw.npmRegistry);
 build.npmInstall('./package.json');
 build.npmInstall('./package/package.json');
+build.jspmInstall('./package/package.json');
 
 build.forwardPort(80);
 
