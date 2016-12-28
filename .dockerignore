@@ -13,6 +13,7 @@ coverage/
 !.micro-build/json-env-data.json
 !.jsonenv/_current_result.json.d.ts
 !.micro-build/npm-install
+!.micro-build/bin
 !.micro-build/package-json
 !.micro-build/jspm-install
 dist
