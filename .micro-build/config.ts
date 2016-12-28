@@ -51,8 +51,4 @@ if (!fs.existsSync(cache_host_path)) {
 build.volume(cache_host_path, '/data/temp');
 build.environmentVariable('FILE_CACHE_PATH', cache_host_path);
 
-if (JsonEnv.isDebug) {
-	build.dependService('accounts', 'ssh://git@git.microduino.cn:2222/website-v2/user-center.git');
-}
-
 build.appendDockerFile('package/build.Dockerfile');
