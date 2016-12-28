@@ -18,7 +18,7 @@ build.domainName(projectName + '.' + JsonEnv.baseDomainName);
 
 build.isInChina(JsonEnv.gfw.isInChina, JsonEnv.gfw);
 build.npmCacheLayer(JsonEnv.gfw.npmRegistry);
-build.npmInstall('./package.json');
+build.npmInstall('./package.json', ['python', 'make', 'g++']);
 build.npmInstall('./package/package.json');
 build.jspmInstall('./package/package.json');
 
