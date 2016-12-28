@@ -1,25 +1,25 @@
 {
-  "name": "@microduino-private/image-upload-client",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/require.js",
-  "dependencies": {
-    "@gongt/dts-concat": "*",
-    "@gongt/jenv-data": "*",
-    "@gongt/make-next-private-version": "*",
-    "@types/node": "^6.0.45",
-    "@types/qs": "^6.2.30",
-    "fast-sha256": "^1.0.0",
-    "jspm": "^0.16.48",
-    "node-fetch": "^1.6.3",
-    "qs": "*",
-    "source-map-support": "*"
-  },
-  "jspm": {
-    "configFile": "jspm.js",
-    "dependencies": {
-      "fast-sha256": "npm:fast-sha256@^1.0.0",
-      "qs": "npm:qs@^6.3.0"
-    }
-  }
+	"name": "@microduino-private/image-upload-client",
+	"version": "1.0.0",
+	"description": "",
+	"main": "dist/require.js",
+	"dependencies": {
+		"@gongt/dts-concat": "*",
+		"@gongt/jenv-data": "*",
+		"@gongt/make-next-private-version": "*",
+		"@types/node": "^6.0.45",
+		"@types/qs": "^6.2.30",
+		"fast-sha256": "^1.0.0",
+		"jspm": "^0.16.48",
+		"node-fetch": "^1.6.3",
+		"qs": "*",
+		"source-map-support": "*"
+	},
+	"jspm": {
+		"configFile": "jspm.js",
+		"dependencies": {
+			"fast-sha256": "npm:fast-sha256@^1.0.0",
+			"qs": "npm:qs@^6.3.0"
+		}
+	}
 }
