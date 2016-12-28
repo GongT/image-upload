@@ -1,5 +1,6 @@
 import {sha256_file} from "./sha256_extra";
 import {SignApiResult, FileProperties} from "./public-define";
+import {fetch} from "./fetch";
 
 declare const require: any;
 try {
@@ -13,7 +14,6 @@ export interface KeyValuePair {
 }
 
 import Qs = require('qs');
-import {fetch} from "./fetch";
 
 declare const window, global;
 const g = typeof window === 'object'? window : global;
@@ -46,6 +46,9 @@ export class ImageUploadService {
 	private CONFIG_HOLDER = null;
 	
 	constructor(opt: ServiceOptions) {
+		if (!opt) {
+			throw new TypeError('no options.')
+		}
 		if (opt.serverHash) {
 			this.CONFIG_SERVER_HASH = opt.serverHash;
 		}

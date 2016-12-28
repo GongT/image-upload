@@ -4,22 +4,29 @@
 	"description": "",
 	"main": "dist/require.js",
 	"dependencies": {
+		"fast-sha256": "^1.0.0",
+		"node-fetch": "^1.6.3",
+		"qs": "*",
+		"source-map-support": "*"
+	},
+	"devDependencies": {
 		"@gongt/dts-concat": "*",
 		"@gongt/jenv-data": "*",
 		"@gongt/make-next-private-version": "*",
 		"@types/node": "^6.0.45",
 		"@types/qs": "^6.2.30",
-		"fast-sha256": "^1.0.0",
-		"jspm": "^0.16.48",
-		"node-fetch": "^1.6.3",
-		"qs": "*",
-		"source-map-support": "*"
+		"jspm": "^0.16.48"
 	},
 	"jspm": {
 		"configFile": "jspm.js",
 		"dependencies": {
 			"fast-sha256": "npm:fast-sha256@^1.0.0",
 			"qs": "npm:qs@^6.3.0"
+		},
+		"devDependencies": {
+			"babel": "npm:babel-core@^5.8.24",
+			"babel-runtime": "npm:babel-runtime@^5.8.24",
+			"core-js": "npm:core-js@^1.1.4"
 		}
 	}
 }

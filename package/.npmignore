@@ -1,6 +1,6 @@
-dist/
 *.tgz
 .npmignore
 create-config.js
 build.Dockerfile
 build.sh
+jspm_packages
