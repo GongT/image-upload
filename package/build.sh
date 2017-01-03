@@ -2,6 +2,8 @@
 set -e
 set -x
 
+update-resolve
+
 REAL_IS_BUILDING="${BUILDING}"
 export BUILDING=yes
 
@@ -47,5 +49,3 @@ else
 fi
 
 rm -f *.tgz
-npm pack
-mv *.tgz package.tgz

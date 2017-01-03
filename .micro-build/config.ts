@@ -20,6 +20,7 @@ build.isInChina(JsonEnv.gfw.isInChina, JsonEnv.gfw);
 build.npmCacheLayer(JsonEnv.gfw.npmRegistry);
 build.npmInstall('./package.json', ['python', 'make', 'g++']);
 build.npmInstall('./package/package.json');
+build.github(JsonEnv.gfw.github);
 build.jspmInstall('./package/package.json');
 
 build.forwardPort(80);
@@ -43,12 +44,14 @@ build.addPlugin(EPlugins.typescript, {
 
 build.environmentVariable('DEBUG', projectName + ':*');
 
-const cache_host_path = require('path').resolve(__dirname, 'temp-image-upload');
-const fs = require('fs');
-if (!fs.existsSync(cache_host_path)) {
-	fs.mkdirSync(cache_host_path);
-}
-build.volume(cache_host_path, '/data/temp');
-build.environmentVariable('FILE_CACHE_PATH', cache_host_path);
+// const cache_host_path = require('path').resolve(__dirname, 'temp-image-upload');
+// const fs = require('fs');
+// if (!fs.existsSync(cache_host_path)) {
+// 	fs.mkdirSync(cache_host_path);
+// }
+// build.volume(cache_host_path, '/data/temp');
+// build.environmentVariable('FILE_CACHE_PATH', cache_host_path);
 
 build.appendDockerFile('package/build.Dockerfile');
+
+build.dockerRunArgument('--dns=${HOST_LOOP_IP}');

@@ -9,7 +9,10 @@ jspm_packages
 *.log
 npm-debug.log*
 coverage/
+typings/
 *.md
+Dockerfile
+*.Dockerfile
 !.micro-build/json-env-data.json
 !.jsonenv/_current_result.json.d.ts
 !.micro-build/npm-install
@@ -22,7 +25,5 @@ package/dist
 
 
 temp-image-upload/
-package/browser.js
-package/node.js
 package/request-url.txt
 package/jspm.js
