@@ -1,6 +1,7 @@
 *.tgz
-.npmignore
+.*ignore
 create-config.js
 build.Dockerfile
 build.sh
 jspm_packages
+node_modules

@@ -25,7 +25,13 @@ else
 	cd package
 fi
 
+rm -f dist/bundle.js
 jspm bundle-sfx dist/global.js dist/bundle.js --format global
+if [ ! -f dist/bundle.js ]; then
+	echo "Error: can't create bundle.js" >&2
+	exit 1
+fi
+
 dts-concat "@microduino-private/image-upload-client" dist/index.d.ts > index.d.ts
 echo -e "\e[38;5;10mcompile ok...\e[0m"
 
