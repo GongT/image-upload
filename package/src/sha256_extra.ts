@@ -1,4 +1,6 @@
-import sha256 from "./sha256";
+/// <reference path="./test.d.ts"/>
+
+import {sha256} from "sha.js";
 
 export function sha256_file(f: File): Promise<string> {
 	const reader = new FileReader();
@@ -7,28 +9,15 @@ export function sha256_file(f: File): Promise<string> {
 			reject(evt.target['error']);
 		});
 		reader.addEventListener('load', () => {
-			const shaBuffer = sha256(new Uint8Array(reader.result));
-			resolve(bufferToString(shaBuffer));
+			const sha = (new sha256())
+				.update(reader.result)
+				.digest('hex');
+			
+			resolve(sha);
 		});
 	});
 	
 	reader.readAsArrayBuffer(f);
 	
 	return p
-}
-
-function pad(s) {
-	if (s.length === 1) {
-		return `0${s}`;
-	} else {
-		return s;
-	}
-}
-
-function bufferToString(buffer) {
-	let string = '';
-	buffer.forEach((byte) => {
-		string += pad(byte.toString(16));
-	});
-	return string.toLowerCase();
 }

@@ -5,3 +5,4 @@ build.Dockerfile
 build.sh
 jspm_packages
 node_modules
+jspm.js

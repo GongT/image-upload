@@ -1,11 +1,12 @@
 import {sha256_file} from "./sha256_extra";
 import {SignApiResult, FileProperties} from "./public-define";
 import {fetch} from "./fetch";
+import {RequestBaseDomain} from "./config";
+import Qs = require('qs');
 
 declare const require: any;
 try {
-	const x = require;
-	x("source-map-support/register");
+	global['require']("source-map-support/register");
 } catch (e) {
 }
 
@@ -13,17 +14,17 @@ export interface KeyValuePair {
 	[id: string]: string;
 }
 
-import Qs = require('qs');
+const requestUrl = slashEnd(RequestBaseDomain) + 'api/';
 
-declare const window, global;
-const g = typeof window === 'object'? window : global;
-const requestUrl = slashEnd(g.IMAGE_UPLOAD_REQUEST_URL) + 'api/';
-
+declare const JsonEnv: any;
 const CONFIG_SERVER_HASH = (() => {
-	if (typeof window === 'object' || !global.hasOwnProperty('JsonEnv')) {
+	if (typeof window === 'object') {
 		return undefined;
 	}
-	return global.JsonEnv.upload.hashKey;
+	if (!global.hasOwnProperty('JsonEnv') && !process.env.imageUploadHashKey) {
+		throw new Error('no JsonEnv and no env.imageUploadHashKey.');
+	}
+	return JsonEnv.upload.hashKey || process.env.imageUploadHashKey;
 })();
 
 function slashEnd(str) {
@@ -44,6 +45,7 @@ let fileObject;
 export class ImageUploadService {
 	private CONFIG_SERVER_HASH = CONFIG_SERVER_HASH;
 	private CONFIG_HOLDER = null;
+	private userToken: string;
 	
 	constructor(opt: ServiceOptions) {
 		if (!opt) {
@@ -57,6 +59,10 @@ export class ImageUploadService {
 		} else {
 			throw new TypeError('no projectName.')
 		}
+	}
+	
+	attachUserToken(newToken: string) {
+		this.userToken = newToken;
 	}
 	
 	requestSignUrl(fileObject: File, metaData: KeyValuePair = {}): Promise<SignApiResult> {
@@ -194,6 +200,7 @@ export class ImageUploadService {
 		}
 		
 		req.headers = Object.assign({
+			'ucLoginToken': this.userToken,
 			'Accept': 'application/json, application/xml',
 			'Content-Type': 'application/json'
 		}, _options.headers);

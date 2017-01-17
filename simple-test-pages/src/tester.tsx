@@ -1,4 +1,4 @@
-import {ImageUploadService} from "../package/src/index";
+import {ImageUploadService} from "@microduino-private/image-upload-client/index";
 import {render} from "react-dom";
 import * as React from "react";
 import {TestingContext, testContext} from "./share-variables";
@@ -12,13 +12,15 @@ import {TestGetFile} from "./items/get-file";
 import {TestUnreferFile} from "./items/unrefer-file";
 import {Row} from "./row";
 import {BS3PanelForm} from "./panel";
-import {sha256_file} from "../../package/src/sha256_extra";
 import {BlockDisplay} from "./block-display";
 import {TestCheckFileComplete} from "./items/check-file-complete";
+import {sha256_file} from "@microduino-private/image-upload-client/sha256_extra";
 
-const service = new ImageUploadService();
+const service = new ImageUploadService({
+	projectName: 'test'
+});
 
-class RootComponent extends React.Component<> {
+class RootComponent extends React.Component<void, void> {
 	static childContextTypes = testContext;
 	private _last_context: TestingContext = {
 		api: service,

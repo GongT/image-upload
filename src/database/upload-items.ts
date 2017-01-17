@@ -63,7 +63,7 @@ export class UploadItems extends DataModel<FileProperties> {
 		return UploadItemsSchema;
 	}
 	
-	checkHash(hash: string, upsert?: KeyValuePair, meta?: KeyValuePair) {
+	checkExistsByHash(hash: string, upsert?: KeyValuePair, meta?: KeyValuePair) {
 		debugUpload('fetch file with hash: %s', hash);
 		
 		let hasMeta = meta && Object.keys(meta).length > 0;

@@ -19,9 +19,7 @@ build.domainName(projectName + '.' + JsonEnv.baseDomainName);
 build.isInChina(JsonEnv.gfw.isInChina, JsonEnv.gfw);
 build.npmCacheLayer(JsonEnv.gfw.npmRegistry);
 build.npmInstall('./package.json', ['python', 'make', 'g++']);
-build.npmInstall('./package/package.json');
 build.github(JsonEnv.gfw.github);
-build.jspmInstall('./package/package.json');
 
 build.forwardPort(80);
 
@@ -44,14 +42,22 @@ build.addPlugin(EPlugins.typescript, {
 
 build.environmentVariable('DEBUG', projectName + ':*');
 
-// const cache_host_path = require('path').resolve(__dirname, 'temp-image-upload');
-// const fs = require('fs');
-// if (!fs.existsSync(cache_host_path)) {
-// 	fs.mkdirSync(cache_host_path);
-// }
-// build.volume(cache_host_path, '/data/temp');
-// build.environmentVariable('FILE_CACHE_PATH', cache_host_path);
-
-build.appendDockerFile('package/build.Dockerfile');
+build.appendDockerFileContent('RUN cd package && sh public_package.sh');
 
 build.dockerRunArgument('--dns=${HOST_LOOP_IP}');
+
+build.onConfig(() => {
+	const httpBaseDomain = JsonEnv.upload.requestUrl.replace(/^https/, 'http');
+	const httpsBaseDomain = JsonEnv.isDebug? httpBaseDomain : JsonEnv.upload.requestUrl.replace(/^http/, 'https');
+	const fs = require('fs');
+	const path = require('path');
+	fs.writeFileSync(path.resolve(__dirname, '../package/src/config.ts'), `
+let base;
+if(typeof window === 'object'){
+	base = ${JSON.stringify(httpBaseDomain)};
+} else {
+	base = ${JSON.stringify(httpsBaseDomain)};
+}
+export const RequestBaseDomain = base;
+`, 'utf-8');
+});

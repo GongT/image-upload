@@ -40,7 +40,7 @@ router.post('/sign-upload-url', (req, res, next) => {
 	debugUpload('request check ok: file type is %s', mime);
 	let uploadUrl: string;
 	
-	uploadItemsModel.checkHash(hash, {mime: mime}, meta).then((fileObject: UploadItemsObj) => {
+	uploadItemsModel.checkExistsByHash(hash, {mime: mime}, meta).then((fileObject: UploadItemsObj) => {
 		if (fileObject.hasUploaded) {
 			uploadUrl = '';
 			

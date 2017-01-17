@@ -1,4 +1,4 @@
-///<reference path="../globals.d.ts"/>
+///<reference path="./globals.d.ts"/>
 import "source-map-support/register";
 import "@gongt/jenv-data/global";
 

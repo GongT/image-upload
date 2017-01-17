@@ -1,7 +1,3 @@
 *.tgz
-bundle.js.map
-bundle.js
 index.d.ts
-request-url.txt
-browser.js
-node.js
+src/config.ts

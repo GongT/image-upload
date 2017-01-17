@@ -17,15 +17,20 @@ export const app: express.Application & any = express();
 //noinspection TypeScriptValidateTypes
 app.use(logger(':method :url :status - :response-time ms'));
 
-app.use('/server-package/package.tgz', serveStatic(resolve(__dirname, '../server-package/package.tgz')));
-
 // enable cookies for pages, need to use before use router
 app.use(cookieParser(JsonEnv.cookieKey));
 // http method calls
 app.use(bodyParser.json()); // TODO
 app.use('/api', ApiRouter);
 
-app.use(serveStatic(resolve(__dirname, '../package/'), {etag: true}));
+app.use(serveStatic(resolve(__dirname, '../package/'), {
+	etag: true,
+	fallthrough: true
+}));
+app.use('/jspm_packages', serveStatic(resolve(__dirname, '../simple-test-pages/jspm_packages'), {
+	etag: true,
+	fallthrough: true
+}));
 
 /*// app init complete */
 
