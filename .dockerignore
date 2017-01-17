@@ -19,6 +19,7 @@ Dockerfile
 !.micro-build/bin
 !.micro-build/package-json
 !.micro-build/jspm-install
+!.micro-build/plugins
 dist
 package/dist
 ### <<< END MICRO-BUILD SECTION

@@ -42,7 +42,9 @@ build.addPlugin(EPlugins.typescript, {
 
 build.environmentVariable('DEBUG', projectName + ':*');
 
-build.appendDockerFileContent('RUN cd package && sh public_package.sh');
+build.addPlugin(EPlugins.npm_publish, {
+	path: './package'
+});
 
 build.dockerRunArgument('--dns=${HOST_LOOP_IP}');
 
