@@ -1,13 +1,14 @@
 {
 	"name": "@microduino-private/image-upload-client",
-	"version": "1.0.1",
+	"version": "2.1.0-3",
 	"description": "",
 	"main": "dist/index.js",
 	"dependencies": {
-		"fast-sha256": "^1.0.0",
 		"node-fetch": "^1.6.3",
 		"qs": "*",
-		"source-map-support": "*"
+		"sha.js": "^2.4.8",
+		"source-map-support": "*",
+		"whatwg-fetch": "^2.0.1"
 	},
 	"devDependencies": {
 		"@gongt/dts-concat": "*",
@@ -15,16 +16,6 @@
 		"@types/node": "^6.0.45",
 		"@types/qs": "^6.2.30"
 	},
-	"peerDependencies": {
-		"@gongt/make-next-private-version": "*",
-		"jspm": "^0.16.48"
-	},
-	"jspm": {
-		"configFile": "jspm.js",
-		"dependencies": {
-			"qs": "npm:qs@^6.3.0",
-			"sha.js": "npm:sha.js@^2.4.8"
-		},
-		"devDependencies": {}
-	}
+	"peerDependencies": {},
+	"backupVersion": "2.1.0"
 }

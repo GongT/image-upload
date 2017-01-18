@@ -1,7 +1,7 @@
 import {sha256_file} from "./sha256_extra";
 import {SignApiResult, FileProperties} from "./public-define";
 import {fetch} from "./fetch";
-import {RequestBaseDomain} from "./config";
+import {IS_PACKAGE_DEBUG_MODE, CONFIG_BASE_DOMAIN, CONFIG_BASE_DOMAIN_DEBUG} from "./cfg";
 import Qs = require('qs');
 
 declare const require: any;
@@ -14,7 +14,8 @@ export interface KeyValuePair {
 	[id: string]: string;
 }
 
-const requestUrl = slashEnd(RequestBaseDomain) + 'api/';
+const requestUrl = slashEnd(CONFIG_BASE_DOMAIN) + 'api/';
+const requestUrlDebug = slashEnd(CONFIG_BASE_DOMAIN_DEBUG) + 'api/';
 
 declare const JsonEnv: any;
 const CONFIG_SERVER_HASH = (() => {
@@ -38,6 +39,7 @@ export interface ServiceOptions {
 	serverHash?: string;
 	holder?: string;
 	projectName: string;
+	debug?: boolean;
 }
 
 let fileObject;
@@ -46,11 +48,13 @@ export class ImageUploadService {
 	private CONFIG_SERVER_HASH = CONFIG_SERVER_HASH;
 	private CONFIG_HOLDER = null;
 	private userToken: string;
+	private requestUrl: string;
 	
 	constructor(opt: ServiceOptions) {
 		if (!opt) {
 			throw new TypeError('no options.')
 		}
+		this.requestUrl = opt.debug? requestUrlDebug : requestUrl;
 		if (opt.serverHash) {
 			this.CONFIG_SERVER_HASH = opt.serverHash;
 		}
@@ -123,7 +127,9 @@ export class ImageUploadService {
 		
 		const file: HTMLInputElement = <any> document.createElement('INPUT');
 		file.setAttribute('type', 'file');
-		// file.style.display='none';
+		if (IS_PACKAGE_DEBUG_MODE) {
+			file.style.display = 'none';
+		}
 		
 		document.body.appendChild(file);
 		const p = new Promise((resolve, reject) => {
@@ -177,7 +183,7 @@ export class ImageUploadService {
 	api(method: string, uri: string, params?: any, _options: any = {}) {
 		let req;
 		if (!/^https?:\/\//.test(uri)) {
-			uri = requestUrl + noSlashStart(uri);
+			uri = this.requestUrl + noSlashStart(uri);
 		}
 		method = method.toLowerCase();
 		if (params) {

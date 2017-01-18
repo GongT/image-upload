@@ -7,7 +7,6 @@ import {SignApiResult} from "./public-define";
 import bodyParser = require("body-parser");
 
 export const router: CoreRouter = Router();
-const BASE_URL = slashEnd(JsonEnv.upload.requestUrl);
 
 function slashEnd(str) {
 	return str.replace(/([^\/])$/, '$1/');

@@ -2,7 +2,7 @@
 	"name": "image-upload",
 	"scripts": {
 		"test-ui": "http-server simple-test-pages/",
-		"build": "jenv sh -c 'cat package/build.Dockerfile | sed s/^RUN//g | tee /dev/stderr | bash'"
+		"publish": "cd package && bash ../.micro-build/plugins/npm-publish-private"
 	},
 	"dependencies": {
 		"@gongt/jenv-data": "*",
@@ -29,6 +29,7 @@
 		"multer": "^1.2.0",
 		"qs": "^6.3.0",
 		"request": "^2.78.0",
+		"sha.js": "^2.4.8",
 		"source-map-support": "^0.4.8"
 	},
 	"devDependencies": {
@@ -37,5 +38,6 @@
 	},
 	"version": "0.0.0",
 	"description": "",
-	"repository": {}
+	"repository": {},
+	"private": true
 }

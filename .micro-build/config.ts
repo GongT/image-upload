@@ -1,6 +1,8 @@
+import {MicroBuildHelper} from "./x/microbuild-helper";
 import {MicroBuildConfig, ELabelNames, EPlugins} from "./x/microbuild-config";
-import {JsonEnv} from "../.jsonenv/_current_result.json.d.ts";
+import {JsonEnv} from "../.jsonenv/_current_result";
 declare const build: MicroBuildConfig;
+declare const helper: MicroBuildHelper;
 /*
  +==================================+
  | <**DON'T EDIT ABOVE THIS LINE**> |
@@ -40,6 +42,8 @@ build.addPlugin(EPlugins.typescript, {
 	target: 'package/dist',
 });
 
+build.listenPort(JsonEnv.upload.debugPort);
+
 build.environmentVariable('DEBUG', projectName + ':*');
 
 build.addPlugin(EPlugins.npm_publish, {
@@ -48,18 +52,8 @@ build.addPlugin(EPlugins.npm_publish, {
 
 build.dockerRunArgument('--dns=${HOST_LOOP_IP}');
 
-build.onConfig(() => {
-	const httpBaseDomain = JsonEnv.upload.requestUrl.replace(/^https/, 'http');
-	const httpsBaseDomain = JsonEnv.isDebug? httpBaseDomain : JsonEnv.upload.requestUrl.replace(/^http/, 'https');
-	const fs = require('fs');
-	const path = require('path');
-	fs.writeFileSync(path.resolve(__dirname, '../package/src/config.ts'), `
-let base;
-if(typeof window === 'object'){
-	base = ${JSON.stringify(httpBaseDomain)};
-} else {
-	base = ${JSON.stringify(httpsBaseDomain)};
-}
-export const RequestBaseDomain = base;
-`, 'utf-8');
+build.onConfig((isBuild) => {
+	const config = helper.createConfig();
+	config.save('package/src/cfg.ts');
+	config.save('src/cfg.ts');
 });

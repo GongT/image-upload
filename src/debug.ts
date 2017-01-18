@@ -1,5 +1,6 @@
 import {Application, static as serveStatic} from "express";
 import {resolve} from "path";
+import {CONFIG_BASE_DOMAIN} from "./cfg";
 
 const debug = require("debug");
 
@@ -11,7 +12,7 @@ export function createDebugPages(app: Application) {
 	app.engine('ejs', require('ejs').renderFile);
 	app.get('/', (req, res, next) => {
 		res.render(resolve(__dirname, '../simple-test-pages/src/index.ejs'), {
-			requestUrl: JsonEnv.upload.requestUrl.replace(/\/$/, ''),
+			requestUrl: CONFIG_BASE_DOMAIN,
 		});
 	});
 	app.use('/tester', serveStatic(resolve(__dirname, '../simple-test-pages/src')));
