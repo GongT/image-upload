@@ -1,7 +1,7 @@
 import {sha256_file} from "./sha256_extra";
 import {SignApiResult, FileProperties} from "./public-define";
 import {fetch} from "./fetch";
-import {IS_PACKAGE_DEBUG_MODE, CONFIG_BASE_DOMAIN, CONFIG_BASE_DOMAIN_DEBUG} from "./cfg";
+import {IS_PACKAGE_DEBUG_MODE, CONFIG_BASE_DOMAIN} from "./cfg";
 import Qs = require('qs');
 
 declare const require: any;
@@ -15,7 +15,7 @@ export interface KeyValuePair {
 }
 
 const requestUrl = slashEnd(CONFIG_BASE_DOMAIN) + 'api/';
-const requestUrlDebug = slashEnd(CONFIG_BASE_DOMAIN_DEBUG) + 'api/';
+const requestUrlDebug = slashEnd(CONFIG_BASE_DOMAIN) + 'api/';
 
 declare const JsonEnv: any;
 const CONFIG_SERVER_HASH = (() => {

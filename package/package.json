@@ -1,6 +1,6 @@
 {
 	"name": "@microduino-private/image-upload-client",
-	"version": "2.1.0-3",
+	"version": "2.1.0-10",
 	"description": "",
 	"main": "dist/index.js",
 	"dependencies": {
