@@ -2,8 +2,8 @@ import {createConnection, Model, Schema, SchemaOptions, Document} from "mongoose
 import {ObjectSchema} from "./base";
 import {MyDocument} from "../public-define";
 
-const db = createConnection(JsonEnv.upload.database);
-console.log('database url: %s', JsonEnv.upload.database);
+const db = createConnection(JsonEnv.DataBaseUrl);
+console.log('database url: %s', JsonEnv.DataBaseUrl);
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
