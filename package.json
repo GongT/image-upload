@@ -2,7 +2,9 @@
 	"name": "image-upload",
 	"scripts": {
 		"test-ui": "http-server simple-test-pages/",
-		"publish": "microbuild mkconfig ; cd package && bash ../.micro-build/plugins/npm-publish-private"
+		"publish": "microbuild mkconfig ; cd package && bash ../.micro-build/plugins/npm-publish-private",
+		"build": "microbuild build",
+		"service": "microbuild control"
 	},
 	"dependencies": {
 		"@gongt/jenv-data": "*",
