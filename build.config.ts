@@ -18,6 +18,7 @@ build.baseImage('node', 'alpine');
 build.projectName(projectName);
 build.domainName(projectName + '.' + JsonEnv.baseDomainName);
 
+build.forceLocalDns();
 build.isInChina(JsonEnv.gfw.isInChina, JsonEnv.gfw);
 build.npmCacheLayer(JsonEnv.gfw.npmRegistry);
 build.npmInstall('./package.json', ['python', 'make', 'g++']);
