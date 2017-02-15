@@ -32,7 +32,8 @@
 		"qs": "^6.3.0",
 		"request": "^2.79.0",
 		"sha.js": "^2.4.8",
-		"source-map-support": "^0.4.11"
+		"source-map-support": "^0.4.11",
+		"typescript-common-library": "git+https://github.com/GongT/typescript-common-library.git"
 	},
 	"devDependencies": {
 		"morgan": "*",
