@@ -18,6 +18,9 @@ build.baseImage('node', 'alpine');
 build.projectName(projectName);
 build.domainName(projectName + '.' + JsonEnv.baseDomainName);
 
+build.systemdType('notify');
+build.systemdWatchdog(10);
+
 build.forceLocalDns();
 build.isInChina(JsonEnv.gfw.isInChina, JsonEnv.gfw);
 build.npmCacheLayer(JsonEnv.gfw.npmRegistry);
