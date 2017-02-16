@@ -1,13 +1,15 @@
 import * as express from "express";
 import {static as serveStatic} from "express";
-import {createDebug, createDebugPages} from "./debug";
+import {createDebugPages} from "./debug";
 import {resolve} from "path";
 import * as logger from "morgan";
 import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import {router as ApiRouter} from "./api";
-import {createServer} from "http";
-import {APP_RUN_PORT} from "./boot";
+import {createDebug, LEVEL} from "typescript-common-library/server/debug";
+import {initServiceWait} from "typescript-common-library/server/boot/init-systemd-service";
+import {waitDatabaseToConnect} from "typescript-common-library/server/database/mongodb";
+import {bootExpressApp} from "typescript-common-library/server/boot/express-init";
 
 const debug = createDebug('core');
 
@@ -38,60 +40,4 @@ if (JsonEnv.isDebug) {
 	createDebugPages(app);
 }
 
-/**
- * Get port from environment and store in Express.
- */
-
-app.set('port', APP_RUN_PORT);
-
-/**
- * Create HTTP server.
- */
-
-const server = createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(APP_RUN_PORT);
-server.on('error', onError);
-server.on('listening', onListening);
-
-/**
- * Event listener for HTTP server "error" event.
- */
-function onError(error) {
-	if (error.syscall !== 'listen') {
-		throw error;
-	}
-	
-	const bind = typeof APP_RUN_PORT === 'string'
-		? 'Pipe ' + APP_RUN_PORT
-		: 'Port ' + APP_RUN_PORT;
-	
-	// handle specific listen errors with friendly messages
-	switch (error.code) {
-	case 'EACCES':
-		console.error(bind + ' requires elevated privileges');
-		process.exit(1);
-		break;
-	case 'EADDRINUSE':
-		console.error(bind + ' is already in use');
-		process.exit(1);
-		break;
-	default:
-		throw error;
-	}
-}
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-function onListening() {
-	const addr = server.address();
-	const bind = typeof addr === 'string'
-		? 'pipe ' + addr
-		: 'port ' + addr.port;
-	debug('Listening on ' + bind);
-}
+initServiceWait(bootExpressApp(app));
