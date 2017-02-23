@@ -13,7 +13,7 @@
 	"devDependencies": {
 		"@gongt/dts-concat": "*",
 		"@gongt/jenv-data": "*",
-		"@types/node": "^6.0.45",
+		"@types/node": "^7.0.5",
 		"@types/qs": "^6.2.30"
 	},
 	"peerDependencies": {}
