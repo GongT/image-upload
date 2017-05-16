@@ -8,6 +8,7 @@
 	},
 	"dependencies": {
 		"@gongt/jenv-data": "*",
+		"@gongt/ts-stl-server": "git+https://github.com/GongT/typescript-common-library.git",
 		"ali-oss": "^4.8.0",
 		"aws-sdk": "^2.49.0",
 		"body-parser": "^1.17.1",
@@ -22,7 +23,7 @@
 		"qs": "^6.4.0",
 		"request": "^2.81.0",
 		"sha.js": "^2.4.8",
-		"typescript-common-library": "git+https://github.com/GongT/typescript-common-library.git",
+		"systemd-daemon": "^1.1.0",
 		"source-map-support": "^0.4.15"
 	},
 	"devDependencies": {

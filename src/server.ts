@@ -6,14 +6,14 @@ import * as logger from "morgan";
 import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import {router as ApiRouter} from "./api";
-import {createDebug, LEVEL} from "typescript-common-library/server/debug";
-import {initServiceWait} from "typescript-common-library/server/boot/init-systemd-service";
-import {waitDatabaseToConnect} from "typescript-common-library/server/database/mongodb";
-import {bootExpressApp} from "typescript-common-library/server/boot/express-init";
+import {createDebug, LEVEL} from "@gongt/ts-stl-server/debug";
+import {initServiceWait} from "@gongt/ts-stl-server/boot/init-systemd-service";
+import {waitDatabaseToConnect} from "@gongt/ts-stl-server/database/mongodb";
+import {bootExpressApp} from "@gongt/ts-stl-server/boot/express-init";
 
 const debug = createDebug('core');
 
-export const app: express.Application & any = express();
+export const app: express.Application&any = express();
 
 // logging request
 //noinspection TypeScriptValidateTypes
