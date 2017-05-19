@@ -7,8 +7,8 @@
 		"service": "microbuild control"
 	},
 	"dependencies": {
-		"@gongt/jenv-data": "*",
-		"@gongt/ts-stl-server": "git+https://github.com/GongT/typescript-common-library.git",
+		"@gongt/jenv-data": "latest",
+		"@gongt/ts-stl-server": "latest",
 		"ali-oss": "^4.8.0",
 		"aws-sdk": "^2.49.0",
 		"body-parser": "^1.17.1",
