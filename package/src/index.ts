@@ -132,7 +132,7 @@ export class ImageUploadService {
 		}
 		
 		document.body.appendChild(file);
-		const p = new Promise((resolve, reject) => {
+		const p = new Promise<FileProperties>((resolve, reject) => {
 			file.addEventListener('change', () => {
 				if (file.files && file.files[0]) {
 					const p1 = this.simpleUploadFile(file.files[0], metaData);
@@ -149,7 +149,8 @@ export class ImageUploadService {
 			destroy(fileObject);
 		}
 		fileObject = file;
-		return p;
+		
+		return <Promise<FileProperties>>p;
 	}
 	
 	holdFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER, serverHash: string = this.CONFIG_SERVER_HASH): Promise<FileProperties> {

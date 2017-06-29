@@ -4,7 +4,7 @@ import {sha256} from "sha.js";
 
 export function sha256_file(f: File): Promise<string> {
 	const reader = new FileReader();
-	const p = new Promise((resolve, reject) => {
+	const p = new Promise<string>((resolve, reject) => {
 		reader.addEventListener('error', (evt) => {
 			reject(evt.target['error']);
 		});
