@@ -207,7 +207,7 @@ export class ImageUploadService {
 		}
 		
 		req.headers = Object.assign({
-			'ucLoginToken': this.userToken,
+			'X-Image-Login-Token': this.userToken,
 			'Accept': 'application/json, application/xml',
 			'Content-Type': 'application/json'
 		}, _options.headers);
