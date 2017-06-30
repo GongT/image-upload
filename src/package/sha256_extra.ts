@@ -8,9 +8,10 @@ export function sha256_file(f: File): Promise<string> {
 		reader.addEventListener('error', (evt) => {
 			reject(evt.target['error']);
 		});
-		reader.addEventListener('load', () => {
+		reader.addEventListener('loadend', () => {
+			const res: any = new Uint8Array(reader.result);
 			const sha = (new sha256())
-				.update(reader.result)
+				.update(res)
 				.digest('hex');
 			
 			resolve(sha);
