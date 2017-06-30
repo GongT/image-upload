@@ -1,10 +1,10 @@
-import {Document, DocumentQuery, Schema, SchemaTypes} from "mongoose";
+import {DataModel} from "@gongt/ts-stl-server/database/mongodb";
+import {Document, DocumentQuery, Schema, SchemaDefinition, SchemaTypes} from "mongoose";
 import {FileProperties, IHolder, MyDocument} from "../../package/public-define";
 import {createDebug} from "../debug";
 import {DiedFileError} from "../library/base.driver";
 import {driver} from "../library/driver";
 import {ObjectSchema} from "./base";
-import {DataModel} from "./database";
 
 const holderSchema = new Schema({
 	holder: String,
@@ -55,12 +55,12 @@ interface KeyValuePair {
 }
 
 export class UploadItems extends DataModel<FileProperties> {
-	protected getTableName() {
-		return JsonEnv.upload.table;
+	protected createSchema(): SchemaDefinition {
+		return UploadItemsSchema;
 	}
 	
-	protected getSchema() {
-		return UploadItemsSchema;
+	protected get tableName() {
+		return JsonEnv.upload.table;
 	}
 	
 	checkExistsByHash(hash: string, upsert?: KeyValuePair, meta?: KeyValuePair) {
