@@ -24,7 +24,8 @@ build.config.ts
 !.micro-build/docker/package-json
 !.micro-build/docker/plugins
 dist/
-package/dist/
+dist/npm-package/
+dist/client/
 ### <<< END MICRO-BUILD SECTION
 
 temp-image-upload/

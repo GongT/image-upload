@@ -15,9 +15,10 @@ package-lock.json
 !.*ignore
 !.gitinclude
 dist/
-package/dist/
-package/src/cfg.ts
-src/cfg.ts
+dist/npm-package/
+dist/client/
+src/package/cfg.ts
+src/server/cfg.ts
 ### <<< END MICRO-BUILD SECTION
 
 temp-image-upload/

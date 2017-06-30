@@ -29,7 +29,7 @@ build.github(JsonEnv.gfw.github);
 
 build.forwardPort(80);
 
-build.startupCommand('dist/boot.js');
+build.startupCommand('dist/server/boot.js');
 build.shellCommand('node');
 // build.stopCommand('stop.sh');
 
@@ -38,12 +38,16 @@ build.specialLabel(ELabelNames.alias, []);
 build.addPlugin(EPlugins.jenv);
 
 build.addPlugin(EPlugins.typescript, {
-	source: 'src',
+	source: 'src/server',
 	target: 'dist',
 });
 build.addPlugin(EPlugins.typescript, {
-	source: 'package/src',
-	target: 'package/dist',
+	source: 'src/package',
+	target: 'dist/npm-package',
+});
+build.addPlugin(EPlugins.typescript, {
+	source: 'src/simple-test-pages',
+	target: 'dist/client',
 });
 
 build.listenPort(JsonEnv.upload.debugPort);
@@ -51,13 +55,14 @@ build.listenPort(JsonEnv.upload.debugPort);
 build.environmentVariable('DEBUG', projectName + ':*');
 
 build.addPlugin(EPlugins.npm_publish, {
-	path: './package'
+	copy: {
+		"src/package/package.json": "dist/npm-package/package.json",
+	},
+	path: './dist/npm-package',
 });
-
-build.dockerRunArgument('--dns=${HOST_LOOP_IP}');
 
 build.onConfig((isBuild) => {
 	const config = helper.createConfig();
-	config.save('package/src/cfg.ts');
-	config.save('src/cfg.ts');
+	config.save('src/package/cfg.ts');
+	config.save('src/server/cfg.ts');
 });
