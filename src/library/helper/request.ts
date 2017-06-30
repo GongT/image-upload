@@ -4,12 +4,11 @@ import request = require("request");
 
 const debugCheck = createDebug('hash-check');
 
-export function downloadFile({url, urlInternal}: FileProperties): Promise<void|Buffer> {
-	const fileUrl = JsonEnv.isDebug? url : urlInternal;
-	debugCheck('check file: %s', fileUrl);
+export function downloadFile({urlInternal}: FileProperties): Promise<void|Buffer> {
+	debugCheck('check file: %s', urlInternal);
 	
 	return new Promise<void|Buffer>((resolve) => {
-		request(fileUrl, {encoding: null}, (err, resp, body) => {
+		request(urlInternal, {encoding: null}, (err, resp, body) => {
 			if (err) {
 				console.error('base.driver: http error: ', err);
 				debugCheck('request failed: %s', err);

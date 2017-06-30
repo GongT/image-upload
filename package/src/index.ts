@@ -1,7 +1,7 @@
-import {sha256_file} from "./sha256_extra";
-import {SignApiResult, FileProperties} from "./public-define";
+import {CONFIG_BASE_DOMAIN, IS_PACKAGE_DEBUG_MODE} from "./cfg";
 import {fetch} from "./fetch";
-import {IS_PACKAGE_DEBUG_MODE, CONFIG_BASE_DOMAIN} from "./cfg";
+import {FileProperties, SignApiResult} from "./public-define";
+import {sha256_file} from "./sha256_extra";
 import Qs = require('qs');
 
 declare const require: any;
@@ -127,7 +127,7 @@ export class ImageUploadService {
 		
 		const file: HTMLInputElement = <any> document.createElement('INPUT');
 		file.setAttribute('type', 'file');
-		if (IS_PACKAGE_DEBUG_MODE) {
+		if (!IS_PACKAGE_DEBUG_MODE) {
 			file.style.display = 'none';
 		}
 		
@@ -208,12 +208,15 @@ export class ImageUploadService {
 		
 		req.headers = Object.assign({
 			'X-Image-Login-Token': this.userToken,
-			'Accept': 'application/json, application/xml',
-			'Content-Type': 'application/json'
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
 		}, _options.headers);
 		if (!req.credentials) {
 			req.credentials = 'same-origin';
 		}
+		req.mode = 'cors';
+		req.redirect = 'follow';
+		req.cache = 'no-cache';
 		
 		return fetch(uri, req).then((response) => {
 			if (response.status === 200) {
@@ -225,7 +228,7 @@ export class ImageUploadService {
 			}
 			throw {
 				status: response.status,
-				message: `http error: ${response.statusText}`
+				message: `http error: ${response.statusText}`,
 			};
 		}).then((data) => {
 			if (typeof data === 'string') {
