@@ -1,8 +1,11 @@
 {
-	"name": "image-upload",
+	"name": "@gongt/image-upload",
+	"version": "1.0.0",
+	"description": "image upload service",
+	"repository": {},
 	"scripts": {
 		"test-ui": "http-server simple-test-pages/",
-		"publish": "microbuild mkconfig ; cd package && bash ../.micro-build/plugins/npm-publish-private",
+		"prepublishOnly": "sh pre-publish.sh",
 		"build": "microbuild build",
 		"service": "microbuild control"
 	},
@@ -51,9 +54,6 @@
 		"mocha": "*",
 		"morgan": "*"
 	},
-	"version": "0.0.1",
-	"description": "",
-	"repository": {},
 	"jspm": {
 		"name": "tester",
 		"main": "index.js",
