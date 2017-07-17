@@ -1,4 +1,5 @@
-import {CONFIG_BASE_DOMAIN, IS_PACKAGE_DEBUG_MODE} from "./cfg";
+import {IS_CLIENT, IS_SERVER, isomorphicGlobal} from "@gongt/ts-stl-library/check-environment";
+import {GlobalVariable} from "@gongt/ts-stl-library/pattern/global-page-data";
 import {fetch} from "./fetch";
 import {FileProperties, SignApiResult} from "./public-define";
 import {sha256_file} from "./sha256_extra";
@@ -14,19 +15,7 @@ export interface KeyValuePair {
 	[id: string]: string;
 }
 
-const requestUrl = slashEnd(CONFIG_BASE_DOMAIN) + 'api/';
-const requestUrlDebug = slashEnd(CONFIG_BASE_DOMAIN) + 'api/';
-
 declare const JsonEnv: any;
-const CONFIG_SERVER_HASH = (() => {
-	if (typeof window === 'object') {
-		return undefined;
-	}
-	if (!global.hasOwnProperty('JsonEnv') && !process.env.imageUploadHashKey) {
-		throw new Error('no JsonEnv and no env.imageUploadHashKey.');
-	}
-	return JsonEnv.upload.hashKey || process.env.imageUploadHashKey;
-})();
 
 function slashEnd(str) {
 	return str.replace(/([^\/])$/, '$1/');
@@ -40,28 +29,85 @@ export interface ServiceOptions {
 	holder?: string;
 	projectName: string;
 	debug?: boolean;
+	serverUrl?: string;
 }
 
 let fileObject;
 
+function getServerToken() {
+	try {
+		const {JsonEnv} = require('@gongt/jenv-data');
+		return JsonEnv.serverRequestKey;
+	} catch (e) {
+	}
+}
+export const ImageUploadPassingVar = 'ImageUploadRemoteUrl';
+function getRequestUrl() {
+	let url = GlobalVariable.get(isomorphicGlobal, ImageUploadPassingVar);
+	if (url) {
+		if (!/https?:/.test(url)) {
+			url = location.protocol + url;
+		}
+	} else if (IS_SERVER) {
+		try {
+			const {JsonEnv} = require('@gongt/jenv-data');
+			url = JsonEnv.upload['apiEndPoint'] || 'http://image-upload.' + JsonEnv.baseDomainName;
+		} catch (e) {
+		}
+	}
+	return url;
+}
+
+function guessOptions(opt: ServiceOptions) {
+	if (!opt.serverUrl) {
+		opt.serverUrl = getRequestUrl();
+	}
+	if (!opt.serverHash && IS_SERVER) {
+		opt.serverHash = getServerToken();
+	}
+	if (!opt.holder && !opt.projectName && IS_SERVER) {
+		opt.projectName = process.env.PROJECT_NAME;
+	}
+	
+}
+function safeUrl(str: string) {
+	if (!/^https?:/.test(str)) {
+		str = location.protocol + str;
+	}
+	if (!/\/$/.test(str)) {
+		str += '/';
+	}
+	return str;
+}
+
 export class ImageUploadService {
-	private CONFIG_SERVER_HASH = CONFIG_SERVER_HASH;
+	private serverHash;
 	private CONFIG_HOLDER = null;
 	private userToken: string;
 	private requestUrl: string;
 	
 	constructor(opt: ServiceOptions) {
 		if (!opt) {
-			throw new TypeError('no options.')
+			throw new Error('image-upload: no options.')
 		}
-		this.requestUrl = opt.debug? requestUrlDebug : requestUrl;
+		guessOptions(opt);
+		
+		this.requestUrl = safeUrl(opt.serverUrl);
+		if (!this.requestUrl) {
+			throw new Error('image-upload: require option: requestUrl');
+		}
 		if (opt.serverHash) {
-			this.CONFIG_SERVER_HASH = opt.serverHash;
+			if (IS_CLIENT) {
+				throw new Error('image-upload: do not use option on client: serverHash')
+			}
+			this.serverHash = opt.serverHash;
+		} else if (IS_SERVER) {
+			throw new Error('image-upload: require option on server: serverHash')
 		}
 		if (opt.holder || opt.projectName) {
 			this.CONFIG_HOLDER = opt.holder || opt.projectName;
 		} else {
-			throw new TypeError('no projectName.')
+			throw new Error('image-upload: require option: projectName.')
 		}
 	}
 	
@@ -127,9 +173,7 @@ export class ImageUploadService {
 		
 		const file: HTMLInputElement = <any> document.createElement('INPUT');
 		file.setAttribute('type', 'file');
-		if (!IS_PACKAGE_DEBUG_MODE) {
-			file.style.display = 'none';
-		}
+		file.style.display = 'none';
 		
 		document.body.appendChild(file);
 		const p = new Promise<FileProperties>((resolve, reject) => {
@@ -153,7 +197,7 @@ export class ImageUploadService {
 		return <Promise<FileProperties>>p;
 	}
 	
-	holdFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER, serverHash: string = this.CONFIG_SERVER_HASH): Promise<FileProperties> {
+	holdFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER): Promise<FileProperties> {
 		if (!holder) {
 			throw new Error('holdFile: `holder` param is required.');
 		}
@@ -161,13 +205,13 @@ export class ImageUploadService {
 			id: fileId,
 			holder,
 			relatedId,
-			serverHash,
+			serverHash: this.serverHash,
 		}).then((ret) => {
 			return ret.file;
 		});
 	}
 	
-	releaseFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER, serverHash: string = this.CONFIG_SERVER_HASH): Promise<FileProperties> {
+	releaseFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER): Promise<FileProperties> {
 		if (!holder) {
 			throw new Error('releaseFile: `holder` param is required.');
 		}
@@ -175,7 +219,7 @@ export class ImageUploadService {
 			id: fileId,
 			holder,
 			relatedId,
-			serverHash,
+			serverHash: this.serverHash,
 		}).then((ret) => {
 			return ret.file;
 		});
@@ -184,7 +228,7 @@ export class ImageUploadService {
 	api(method: string, uri: string, params?: any, _options: any = {}) {
 		let req;
 		if (!/^https?:\/\//.test(uri)) {
-			uri = this.requestUrl + noSlashStart(uri);
+			uri = this.requestUrl + 'api/' + noSlashStart(uri);
 		}
 		method = method.toLowerCase();
 		if (params) {

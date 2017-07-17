@@ -54,15 +54,17 @@ build.listenPort(JsonEnv.upload.debugPort);
 
 build.environmentVariable('DEBUG', projectName + ':*');
 
-build.addPlugin(EPlugins.npm_publish, {
-	copy: {
-		"src/package/package.json": "dist/npm-package/package.json",
-	},
-	path: './dist/npm-package',
-});
-
 build.onConfig((isBuild) => {
-	const config = helper.createConfig();
-	config.save('src/package/cfg.ts');
-	config.save('src/server/cfg.ts');
+	if (!isBuild) {
+		const r = require('child_process').spawnSync('sh', ['pre-start.sh'], {
+			stdio: 'inherit',
+			cwd: __dirname,
+		});
+		if (r.error) {
+			throw r.error;
+		}
+		if (r.status !== 0) {
+			process.exit(r.status);
+		}
+	}
 });

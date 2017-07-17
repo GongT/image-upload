@@ -1,5 +1,6 @@
 import {bootExpressApp} from "@gongt/ts-stl-server/boot/express-init";
 import {initServiceWait} from "@gongt/ts-stl-server/boot/init-systemd-service";
+import {waitDatabaseToConnect} from "@gongt/ts-stl-server/database/mongodb";
 import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import * as express from "express";
@@ -22,4 +23,8 @@ app.use(bodyParser.json()); // TODO
 app.use('/api', ApiRouter);
 /*// app init complete */
 
-initServiceWait(bootExpressApp(app));
+const p = Promise.all([
+	waitDatabaseToConnect(),
+]).then(() => bootExpressApp(app));
+
+initServiceWait(p);

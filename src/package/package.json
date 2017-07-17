@@ -1,20 +1,21 @@
 {
-	"name": "@microduino-private/image-upload-client",
-	"version": "2.2.2",
+	"name": "@gongt/image-uploader",
+	"version": "1.0.0",
 	"description": "",
-	"main": "dist/index.js",
+	"main": "./index.js",
 	"dependencies": {
-		"node-fetch": "^1.6.3",
+		"@gongt/ts-stl-library": "latest",
+		"node-fetch": "^1.7.1",
+		"whatwg-fetch": "^2.0.3",
 		"qs": "*",
 		"sha.js": "^2.4.8",
-		"source-map-support": "*",
-		"whatwg-fetch": "^2.0.1"
+		"source-map-support": "*"
 	},
 	"devDependencies": {
 		"@gongt/dts-concat": "*",
 		"@gongt/jenv-data": "*",
-		"@types/node": "^7.0.5",
-		"@types/qs": "^6.2.30"
+		"@types/node": "^8.0.7",
+		"@types/qs": "^6.4.0"
 	},
 	"peerDependencies": {}
 }

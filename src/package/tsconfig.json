@@ -18,11 +18,15 @@
 		"pretty": true,
 		"sourceMap": true,
 		"inlineSources": true,
-		"baseUrl": "./",
+		"baseUrl": "",
 		"typeRoots": [],
 		"types": [],
 		"jsx": "react",
 		"outDir": "../../dist/npm-package",
-		"rootDir": "./"
+		"rootDir": "./",
+		"paths": {
+			"@gongt/ts-stl-library/*": ["../../node_modules/@gongt/ts-stl-library/*"],
+			"@gongt/ts-stl-client/*": ["../../node_modules/@gongt/ts-stl-client/*"]
+		}
 	}
 }

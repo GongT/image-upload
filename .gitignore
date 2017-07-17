@@ -17,8 +17,6 @@ package-lock.json
 dist/
 dist/npm-package/
 dist/client/
-src/package/cfg.ts
-src/server/cfg.ts
 ### <<< END MICRO-BUILD SECTION
 
 temp-image-upload/
