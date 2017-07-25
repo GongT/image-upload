@@ -140,7 +140,7 @@ function hold_release_check(req, next) {
 		return true;
 	}
 	
-	if (serverHash !== JsonEnv.upload.hashKey && serverHash !== JsonEnv.serverRequestKey) {
+	if (serverHash !== JsonEnv.serverRequestKey && serverHash !== JsonEnv.upload['hashKey']) {
 		next(new Error('invalid request, key problem'));
 		return true;
 	}
