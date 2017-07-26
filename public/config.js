@@ -2,13 +2,13 @@ SystemJS.config({
 	baseURL: '/public',
 	paths: {
 		'tester/': 'tester/',
-		'@microduino-private/image-upload-client/': 'self-package/'
+		'@gongt/image-uploader/': 'self-package/'
 	},
 	packages: {
 		'tester': {
 			'main': 'index.js'
 		},
-		'@microduino-private/image-upload-client': {
+		'@gongt/image-uploader': {
 			defaultExtension: 'js',
 			format: 'cjs',
 			main: 'index.js',

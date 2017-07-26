@@ -1,6 +1,6 @@
-import {SignResult, FileProperties} from "@microduino-private/image-upload-client/public-define";
+import {ImageUploadService} from "@gongt/image-uploader/index";
+import {FileProperties, SignResult} from "@gongt/image-uploader/public-define";
 import * as React from "react";
-import {ImageUploadService} from "@microduino-private/image-upload-client/index";
 
 export interface TestingContext {
 	last_result: any;

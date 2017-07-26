@@ -24,7 +24,7 @@
 		"rootDir": "./",
 		"baseUrl": "../../",
 		"paths": {
-			"@microduino-private/image-upload-client/*": ["./dist/npm-package/*"]
+			"@gongt/image-uploader/*": ["./dist/npm-package/*"]
 		}
 	}
 }

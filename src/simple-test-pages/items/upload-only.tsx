@@ -2,7 +2,7 @@ import * as React from "react";
 import {BS3PanelForm} from "../panel";
 import {testContext} from "../share-variables";
 
-export class TestUploadOnly extends React.Component<{},undefined> {
+export class TestUploadOnly extends React.Component<{}, undefined> {
 	static contextTypes = testContext;
 	
 	onSubmit(e) {
@@ -16,7 +16,11 @@ export class TestUploadOnly extends React.Component<{},undefined> {
 			uploadOk: false,
 		});
 		
-		const p = this.context.api.doUploadFile(this.context.sign, this.context.fileObject).then((data) => {
+		const p = this.context.api.doUploadFile(this.context.sign, this.context.fileObject);
+		
+		this.context.handlePromise(p);
+		
+		p.then((data) => {
 			this.context.updateContext({
 				upload: data,
 				uploadOk: true,
@@ -27,8 +31,6 @@ export class TestUploadOnly extends React.Component<{},undefined> {
 				uploadOk: false,
 			});
 		});
-		
-		this.context.handlePromise(p);
 	}
 	
 	render() {

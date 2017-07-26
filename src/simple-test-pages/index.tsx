@@ -1,5 +1,5 @@
-import {ImageUploadService} from "@microduino-private/image-upload-client/index";
-import {sha256_file} from "@microduino-private/image-upload-client/sha256_extra";
+import {ImageUploadService} from "@gongt/image-uploader/index";
+import {sha256_file} from "@gongt/image-uploader/sha256_extra";
 import * as React from "react";
 import {render} from "react-dom";
 import {BlockDisplay} from "./block-display";
@@ -11,6 +11,7 @@ import {TestReferFile} from "./items/refer-file";
 import {TestSignOnly} from "./items/sign-only";
 import {TestUnreferFile} from "./items/unrefer-file";
 import {TestUploadOnly} from "./items/upload-only";
+import {MaskPage} from "./mask";
 import {BS3PanelForm} from "./panel";
 import {ResultDisplay} from "./result-display";
 import {Row} from "./row";
@@ -23,6 +24,10 @@ const service = new ImageUploadService({
 });
 
 class RootComponent extends React.Component<any, any> {
+	state = {
+		busy: false,
+	};
+	
 	static childContextTypes = testContext;
 	private _last_context: TestingContext = {
 		api: service,
@@ -56,8 +61,8 @@ class RootComponent extends React.Component<any, any> {
 	handlePromise(promise: Promise<any>) {
 		this.setState({busy: true});
 		promise.then(
-			this.handleResult.bind(this, true),
-			this.handleResult.bind(this, false),
+			(data) => this.handleResult(true, data),
+			(e) => this.handleResult(false, e),
 		);
 	}
 	
@@ -86,7 +91,7 @@ class RootComponent extends React.Component<any, any> {
 			fileObject: f,
 			shareFile: shareFile,
 		});
-		sha256_file(f).then((hash) => {
+		const p = sha256_file(f).then((hash) => {
 			shareFile.hash = hash;
 			this.updateContext({
 				fileObject: f,
@@ -142,6 +147,8 @@ class RootComponent extends React.Component<any, any> {
 			</div>
 			
 			<ResultDisplay/>
+			
+			{this.state.busy? <MaskPage /> : null}
 		</div>
 	}
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
+import {MetaInput} from "../meta-input";
 import {BS3PanelForm} from "../panel";
 import {testContext} from "../share-variables";
-import {MetaInput} from "../meta-input";
 
 export class TestSignOnly extends React.Component<{}, any> {
 	static contextTypes = testContext;
@@ -20,7 +20,11 @@ export class TestSignOnly extends React.Component<{}, any> {
 			sign: 'requesting',
 		});
 		
-		const p = this.context.api.requestSignUrl(this.context.fileObject, this.context.meta).then((data) => {
+		const p = this.context.api.requestSignUrl(this.context.fileObject, this.context.meta);
+		
+		this.context.handlePromise(p);
+		
+		p.then((data) => {
 			this.context.updateContext({
 				signOk: true,
 				sign: data,
@@ -31,8 +35,6 @@ export class TestSignOnly extends React.Component<{}, any> {
 				sign: e,
 			});
 		});
-		
-		this.context.handlePromise(p);
 	}
 	
 	render() {

@@ -1,7 +1,7 @@
 import * as React from "react";
+import {MetaInput} from "../meta-input";
 import {BS3PanelForm} from "../panel";
 import {testContext} from "../share-variables";
-import {MetaInput} from "../meta-input";
 
 export class TestFullUpload extends React.Component<{}, any> {
 	static contextTypes = testContext;
@@ -26,14 +26,16 @@ export class TestFullUpload extends React.Component<{}, any> {
 		this.context.handlePromise(p);
 		
 		p.then((file) => {
-			this.context.updateContext({shareFile:file});
+			this.context.updateContext({
+				shareFile: file,
+			});
 		});
 	}
 	
 	render() {
 		// const f = this.context.fileObject;
 		return <BS3PanelForm id="fullUpload"
-			styleClass={this.state ? this.state.style : 'default'}
+			styleClass={this.state? this.state.style : 'default'}
 			title="完整上传逻辑"
 			onSubmit={this.onSubmit.bind(this)}
 		>
