@@ -68,9 +68,12 @@ function guessOptions(opt: ServiceOptions) {
 	if (!opt.holder && !opt.projectName && IS_SERVER) {
 		opt.projectName = process.env.PROJECT_NAME;
 	}
-	
 }
+
 function safeUrl(str: string) {
+	if (!str) {
+		return str;
+	}
 	if (!/^https?:/.test(str)) {
 		str = location.protocol + str;
 	}

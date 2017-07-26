@@ -3,6 +3,10 @@
 set -e
 set -x
 
+cd src/package/
+ncu -a -u
+cd ../..
+
 tsc -p src/server
 tsc -p src/package
 tsc -p src/simple-test-pages

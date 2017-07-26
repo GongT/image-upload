@@ -4,7 +4,7 @@ import {DriverBase} from "./base.driver";
 
 let OSS;
 let bucket: ali_oss;
-const endpointUrlInternal = JsonEnv.upload.cdn.url
+const endpointUrlInternal = JsonEnv.upload.image.cdn.url
                                    .replace(/^https:/, 'http:');
 const endpointUrl = endpointUrlInternal
 	.replace('-internal.aliyuncs.com', '.aliyuncs.com')
@@ -20,7 +20,7 @@ export class OSSDriver extends DriverBase {
 		super();
 		
 		OSS = require('ali-oss');
-		const opts = Object.assign({}, JsonEnv.upload.cdn, {
+		const opts = Object.assign({}, JsonEnv.upload.image.cdn, {
 			internal: false,
 			secure: !JsonEnv.isDebug,  // xxx
 		});

@@ -5,7 +5,7 @@ import {DriverBase} from "./base.driver";
 
 let s3;
 
-const BUCKET = JsonEnv.upload.cdn.bucket;
+const BUCKET = JsonEnv.upload.image.cdn.bucket;
 const BUCKET_DOMAIN = `https://${BUCKET}.s3.amazonaws.com`;
 
 export class S3Driver extends DriverBase {
@@ -14,7 +14,7 @@ export class S3Driver extends DriverBase {
 		
 		//noinspection TypeScriptUnresolvedFunction
 		AWS.config.update(
-			JsonEnv.upload.cdn,
+			JsonEnv.upload.image.cdn,
 		);
 		
 		s3 = new AWS.S3();

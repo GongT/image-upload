@@ -1,7 +1,7 @@
 import {resolve} from "path";
 import {createHash} from "crypto";
 
-const ROOT_FOLDER = JsonEnv.upload.rootFolder.replace(/^\//g, '');
+const ROOT_FOLDER = JsonEnv.upload.image.rootFolder.replace(/^\//g, '');
 
 export function getFileRelatedToRootPath(time: Date, fileKey: string) {
 	return resolve('/', ROOT_FOLDER,

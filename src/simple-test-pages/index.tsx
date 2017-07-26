@@ -18,6 +18,8 @@ import {testContext, TestingContext} from "./share-variables";
 
 const service = new ImageUploadService({
 	projectName: 'self-test',
+	debug: true,
+	serverUrl: location.origin,
 });
 
 class RootComponent extends React.Component<any, any> {

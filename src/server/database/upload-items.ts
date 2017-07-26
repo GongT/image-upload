@@ -60,7 +60,7 @@ export class UploadItems extends DataModel<FileProperties> {
 	}
 	
 	protected get tableName() {
-		return JsonEnv.upload.table;
+		return JsonEnv.upload.image.table;
 	}
 	
 	checkExistsByHash(hash: string, upsert?: KeyValuePair, meta?: KeyValuePair) {

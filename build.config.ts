@@ -51,7 +51,7 @@ build.addPlugin(EPlugins.typescript, {
 	target: 'dist/client',
 });
 
-build.listenPort(JsonEnv.upload.debugPort);
+build.listenPort(JsonEnv.upload.image.debugPort);
 
 build.environmentVariable('DEBUG', projectName + ':*');
 
