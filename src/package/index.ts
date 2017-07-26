@@ -5,6 +5,20 @@ import {FileProperties, SignApiResult} from "./public-define";
 import {sha256_file} from "./sha256_extra";
 import Qs = require('qs');
 
+export interface FilePropertiesExtend extends FileProperties {
+	toUrl(internal: boolean): string;
+}
+
+const extendUrlGetter = {
+	toUrl(this: FileProperties, internal: boolean): string{
+		if (internal) {
+			return this.urlInternal;
+		} else {
+			return this.url;
+		}
+	},
+};
+
 declare const require: any;
 try {
 	global['require']("source-map-support/register");
@@ -135,9 +149,9 @@ export class UploadService {
 		});
 	}
 	
-	doUploadFile(sign: SignApiResult, fileObject: File): Promise<FileProperties> {
+	doUploadFile(sign: SignApiResult, fileObject: File): Promise<FilePropertiesExtend> {
 		if (sign.complete) {
-			return Promise.resolve(sign.file);
+			return Promise.resolve(Object.assign(sign.file, extendUrlGetter));
 		}
 		return this.api('put', sign.signedUrl, fileObject, {
 			headers: {
@@ -146,7 +160,7 @@ export class UploadService {
 		}).then(() => {
 			return this.completeUploadFile(sign);
 		}).then(() => {
-			return sign.file;
+			return Object.assign(sign.file, extendUrlGetter);
 		});
 	}
 	
@@ -154,19 +168,19 @@ export class UploadService {
 		return this.api('get', 'complete-upload', {id: sign.file._id});
 	}
 	
-	simpleUploadFile(fileObject: File, metaData: KeyValuePair = {}): Promise<FileProperties> {
+	simpleUploadFile(fileObject: File, metaData: KeyValuePair = {}): Promise<FilePropertiesExtend> {
 		return this.requestSignUrl(fileObject, metaData).then((sign: SignApiResult) => {
 			console.log('server sign file: %O', sign);
 			if (sign.complete) {
 				console.info('this file already uploaded.');
-				return sign.file;
+				return Object.assign(sign.file, extendUrlGetter);
 			} else {
 				return this.doUploadFile(sign, fileObject);
 			}
 		});
 	}
 	
-	headlessUploadFile(metaData: KeyValuePair = {}): Promise<FileProperties> {
+	headlessUploadFile(metaData: KeyValuePair = {}): Promise<FilePropertiesExtend> {
 		if (typeof window !== 'object') {
 			throw new TypeError(`Can't use headless upload on server.`);
 		}
@@ -179,7 +193,7 @@ export class UploadService {
 		file.style.display = 'none';
 		
 		document.body.appendChild(file);
-		const p = new Promise<FileProperties>((resolve, reject) => {
+		const p: any = new Promise((resolve, reject) => {
 			file.addEventListener('change', () => {
 				if (file.files && file.files[0]) {
 					const p1 = this.simpleUploadFile(file.files[0], metaData);
@@ -197,10 +211,19 @@ export class UploadService {
 		}
 		fileObject = file;
 		
-		return <Promise<FileProperties>>p;
+		return p;
 	}
 	
-	holdFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER): Promise<FileProperties> {
+	fetchFile(fileId: string): Promise<FilePropertiesExtend> { // get the file url
+		return this.api('get', 'fetch-file', {
+			id: fileId,
+			serverHash: this.serverHash,
+		}).then((ret) => {
+			return Object.assign(ret.file, extendUrlGetter);
+		});
+	}
+	
+	holdFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER): Promise<any> {
 		if (!holder) {
 			throw new Error('holdFile: `holder` param is required.');
 		}
@@ -209,12 +232,10 @@ export class UploadService {
 			holder,
 			relatedId,
 			serverHash: this.serverHash,
-		}).then((ret) => {
-			return ret.file;
 		});
 	}
 	
-	releaseFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER): Promise<FileProperties> {
+	releaseFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER): Promise<any> {
 		if (!holder) {
 			throw new Error('releaseFile: `holder` param is required.');
 		}
@@ -223,8 +244,6 @@ export class UploadService {
 			holder,
 			relatedId,
 			serverHash: this.serverHash,
-		}).then((ret) => {
-			return ret.file;
 		});
 	}
 	

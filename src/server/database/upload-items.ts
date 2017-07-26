@@ -126,16 +126,12 @@ export class UploadItems extends DataModel<FileProperties> {
 		});
 	}
 	
+	/** @deprecated */
 	getItemById(itemId: string): Promise<UploadItemsObj> {
-		return this.model.findById(itemId).then<UploadItemsObj>((d) => {
-			if (!d) {
-				return Promise.reject(d);
-			}
-			return d;
-		});
+		return this.getById(itemId);
 	}
 	
-	hold(isHold: boolean, id: string, {holder, relatedId}: IHolder): Promise<FileProperties> {
+	hold(isHold: boolean, id: string, {holder, relatedId}: IHolder): Promise<any> {
 		const update: any = {};
 		if (isHold) {
 			update.$addToSet = {
@@ -146,7 +142,7 @@ export class UploadItems extends DataModel<FileProperties> {
 				holders: {holder, relatedId},
 			};
 		}
-		return <any> this.model.findByIdAndUpdate(id, update);
+		return this.update({_id: id}, update);
 	}
 }
 
