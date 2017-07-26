@@ -28,6 +28,7 @@ export class TestFullUpload extends React.Component<{}, any> {
 		p.then((file) => {
 			this.context.updateContext({
 				shareFile: file,
+				fileId: file._id,
 			});
 		});
 	}

@@ -1,21 +1,23 @@
 import * as React from "react";
 import {testContext} from "../share-variables";
 
-export class FileIdDisplay extends React.Component<{},undefined> {
+export class FileIdDisplay extends React.Component<{}, undefined> {
 	static contextTypes = testContext;
 	
+	private onchange(e) {
+		const v = e.target.value;
+		this.context.updateContext({
+			fileId: v,
+		});
+	};
+	
 	render() {
-		let id;
-		try {
-			id = this.context.shareFile._id;
-		} catch (e) {
-		}
 		return <input
 			type="text"
 			placeholder="文件ID"
-			readOnly={true}
 			name="id"
-			value={id||''}
+			onChange={this.onchange.bind(this)}
+			value={this.context.fileId}
 			className="form-control"
 		/>
 	}

@@ -1,5 +1,5 @@
-import {ImageUploadService} from "@gongt/image-uploader/index";
-import {FileProperties, SignResult} from "@gongt/image-uploader/public-define";
+import {UploadService} from "@gongt/file-upload-client/index";
+import {FileProperties, SignResult} from "@gongt/file-upload-client/public-define";
 import * as React from "react";
 
 export interface TestingContext {
@@ -12,7 +12,8 @@ export interface TestingContext {
 	complete: any;
 	shareFile: FileProperties;
 	fileObject: File;
-	api: ImageUploadService;
+	fileId: string;
+	api: UploadService;
 	handleResult: (res: any) => void;
 	handlePromise: (p: Promise<any>) => void;
 	updateContext: (up: any) => void;
@@ -34,4 +35,5 @@ export const testContext = {
 	handlePromise: Function,
 	updateContext: Function,
 	meta: React.PropTypes.any,
+	fileId: React.PropTypes.string,
 };

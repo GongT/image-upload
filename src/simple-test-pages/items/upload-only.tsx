@@ -24,6 +24,7 @@ export class TestUploadOnly extends React.Component<{}, undefined> {
 			this.context.updateContext({
 				upload: data,
 				uploadOk: true,
+				fileId: data._id,
 			});
 		}, (e) => {
 			this.context.updateContext({

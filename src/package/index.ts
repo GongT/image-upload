@@ -83,7 +83,7 @@ function safeUrl(str: string) {
 	return str;
 }
 
-export class ImageUploadService {
+export class UploadService {
 	private serverHash;
 	private CONFIG_HOLDER = null;
 	private userToken: string;
@@ -297,3 +297,6 @@ function destroy(file: HTMLInputElement) {
 		fileObject = null;
 	}
 }
+
+/** @deprecated */
+export const ImageUploadService = UploadService;

@@ -1,5 +1,5 @@
-import {ImageUploadService} from "@gongt/image-uploader/index";
-import {sha256_file} from "@gongt/image-uploader/sha256_extra";
+import {UploadService} from "@gongt/file-upload-client/index";
+import {sha256_file} from "@gongt/file-upload-client/sha256_extra";
 import * as React from "react";
 import {render} from "react-dom";
 import {BlockDisplay} from "./block-display";
@@ -17,7 +17,7 @@ import {ResultDisplay} from "./result-display";
 import {Row} from "./row";
 import {testContext, TestingContext} from "./share-variables";
 
-const service = new ImageUploadService({
+const service = new UploadService({
 	projectName: 'self-test',
 	debug: true,
 	serverUrl: location.origin,
@@ -41,6 +41,7 @@ class RootComponent extends React.Component<any, any> {
 		updateContext: this.updateContext.bind(this),
 		handleResult: this.handleResult.bind(this),
 		handlePromise: this.handlePromise.bind(this),
+		fileId: '',
 		meta: React.PropTypes.any,
 	};
 	

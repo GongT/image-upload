@@ -24,7 +24,7 @@
 		"rootDir": "./",
 		"baseUrl": "../../",
 		"paths": {
-			"@gongt/image-uploader/*": ["./dist/npm-package/*"]
+			"@gongt/file-upload-client/*": ["./dist/npm-package/*"]
 		}
 	}
 }
