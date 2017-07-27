@@ -7,9 +7,9 @@ import {TestCheckFileComplete} from "./items/check-file-complete";
 import {TestEditFile} from "./items/edit-file";
 import {TestFullUpload} from "./items/full-upload";
 import {TestGetFile} from "./items/get-file";
-import {TestReferFile} from "./items/refer-file";
+import {TestHoldFile} from "./items/hold-file";
+import {TestReleaseFile} from "./items/release-file";
 import {TestSignOnly} from "./items/sign-only";
-import {TestUnreferFile} from "./items/unrefer-file";
 import {TestUploadOnly} from "./items/upload-only";
 import {MaskPage} from "./mask";
 import {BS3PanelForm} from "./panel";
@@ -18,7 +18,6 @@ import {Row} from "./row";
 import {testContext, TestingContext} from "./share-variables";
 
 const service = new UploadService({
-	projectName: 'self-test',
 	debug: true,
 	serverUrl: location.origin,
 });
@@ -142,8 +141,8 @@ class RootComponent extends React.Component<any, any> {
 					<TestGetFile />
 				</Row>
 				<Row>
-					<TestReferFile />
-					<TestUnreferFile />
+					<TestHoldFile />
+					<TestReleaseFile />
 				</Row>
 			</div>
 			

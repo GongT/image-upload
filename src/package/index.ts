@@ -1,16 +1,16 @@
 import {IS_CLIENT, IS_SERVER, isomorphicGlobal} from "@gongt/ts-stl-library/check-environment";
 import {GlobalVariable} from "@gongt/ts-stl-library/pattern/global-page-data";
 import {fetch} from "./fetch";
-import {FileProperties, SignApiResult} from "./public-define";
+import {FilePropertiesClient, SignApiResult} from "./public-define";
 import {sha256_file} from "./sha256_extra";
 import Qs = require('qs');
 
-export interface FilePropertiesExtend extends FileProperties {
+export interface FilePropertiesExtend extends FilePropertiesClient {
 	toUrl(internal: boolean): string;
 }
 
 const extendUrlGetter = {
-	toUrl(this: FileProperties, internal: boolean): string{
+	toUrl(this: FilePropertiesClient, internal: boolean): string{
 		if (internal) {
 			return this.urlInternal;
 		} else {
@@ -40,8 +40,7 @@ function noSlashStart(str) {
 
 export interface ServiceOptions {
 	serverHash?: string;
-	holder?: string;
-	projectName: string;
+	projectName?: string;
 	debug?: boolean;
 	serverUrl?: string;
 }
@@ -57,7 +56,7 @@ function getServerToken() {
 }
 export const ImageUploadPassingVar = 'ImageUploadRemoteUrl';
 function getRequestUrl() {
-	let url = GlobalVariable.get(isomorphicGlobal, ImageUploadPassingVar);
+	let {url}:any = GlobalVariable.get(isomorphicGlobal, ImageUploadPassingVar) || {};
 	if (url) {
 		if (!/https?:/.test(url)) {
 			url = location.protocol + url;
@@ -79,8 +78,13 @@ function guessOptions(opt: ServiceOptions) {
 	if (!opt.serverHash && IS_SERVER) {
 		opt.serverHash = getServerToken();
 	}
-	if (!opt.holder && !opt.projectName && IS_SERVER) {
-		opt.projectName = process.env.PROJECT_NAME;
+	if (!opt.projectName) {
+		if (IS_SERVER) {
+			opt.projectName = process.env.PROJECT_NAME;
+		} else {
+			const {projectName}:any = GlobalVariable.get(isomorphicGlobal, ImageUploadPassingVar) || {};
+			opt.projectName = projectName;
+		}
 	}
 }
 
@@ -98,16 +102,19 @@ function safeUrl(str: string) {
 }
 
 export class UploadService {
-	private serverHash;
-	private CONFIG_HOLDER = null;
+	private serverHash: string;
+	private projectName: string;
 	private userToken: string;
 	private requestUrl: string;
+	private debug: boolean;
 	
 	constructor(opt: ServiceOptions) {
 		if (!opt) {
 			throw new Error('image-upload: no options.')
 		}
 		guessOptions(opt);
+		
+		this.debug = opt.debug;
 		
 		this.requestUrl = safeUrl(opt.serverUrl);
 		if (!this.requestUrl) {
@@ -121,11 +128,18 @@ export class UploadService {
 		} else if (IS_SERVER) {
 			throw new Error('image-upload: require option on server: serverHash')
 		}
-		if (opt.holder || opt.projectName) {
-			this.CONFIG_HOLDER = opt.holder || opt.projectName;
+		if (opt.projectName) {
+			this.projectName = opt.projectName;
 		} else {
 			throw new Error('image-upload: require option: projectName.')
 		}
+	}
+	
+	_pass() {
+		return {
+			url: this.requestUrl.replace(/^https?:/, ''),
+			projectName: this.projectName,
+		};
 	}
 	
 	attachUserToken(newToken: string) {
@@ -223,25 +237,25 @@ export class UploadService {
 		});
 	}
 	
-	holdFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER): Promise<any> {
+	holdFile(fileId: string, relatedId: string, holder: string): Promise<any> {
 		if (!holder) {
 			throw new Error('holdFile: `holder` param is required.');
 		}
 		return this.api('post', 'hold-file', {
 			id: fileId,
-			holder,
+			holder: this.projectName + '::' + holder,
 			relatedId,
 			serverHash: this.serverHash,
 		});
 	}
 	
-	releaseFile(fileId: string, relatedId: string, holder: string = this.CONFIG_HOLDER): Promise<any> {
+	releaseFile(fileId: string, relatedId: string, holder: string): Promise<any> {
 		if (!holder) {
 			throw new Error('releaseFile: `holder` param is required.');
 		}
 		return this.api('post', 'release-file', {
 			id: fileId,
-			holder,
+			holder: this.projectName + '::' + holder,
 			relatedId,
 			serverHash: this.serverHash,
 		});
@@ -276,6 +290,7 @@ export class UploadService {
 			'X-Image-Login-Token': this.userToken,
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
+			'X-Image-Upload-Debug': this.debug? 'yes' : '',
 		}, _options.headers);
 		if (!req.credentials) {
 			req.credentials = 'same-origin';
