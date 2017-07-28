@@ -56,19 +56,19 @@ function getServerToken() {
 }
 export const ImageUploadPassingVar = 'ImageUploadRemoteUrl';
 function getRequestUrl() {
-	let {url}:any = GlobalVariable.get(isomorphicGlobal, ImageUploadPassingVar) || {};
-	if (url) {
-		if (!/https?:/.test(url)) {
-			url = location.protocol + url;
+	let {serverUrl}:any = GlobalVariable.get(isomorphicGlobal, ImageUploadPassingVar) || {};
+	if (serverUrl) {
+		if (!/https?:/.test(serverUrl)) {
+			serverUrl = location.protocol + serverUrl;
 		}
 	} else if (IS_SERVER) {
 		try {
 			const {JsonEnv} = require('@gongt/jenv-data');
-			url = JsonEnv.upload['apiEndPoint'] || 'http://image-upload.' + JsonEnv.baseDomainName;
+			serverUrl = JsonEnv.upload['apiEndPoint'] || 'http://image-upload.' + JsonEnv.baseDomainName;
 		} catch (e) {
 		}
 	}
-	return url;
+	return serverUrl;
 }
 
 function guessOptions(opt: ServiceOptions) {
@@ -135,9 +135,9 @@ export class UploadService {
 		}
 	}
 	
-	_pass() {
+	passToClient() {
 		return {
-			url: this.requestUrl.replace(/^https?:/, ''),
+			serverUrl: this.requestUrl.replace(/^https?:/, ''),
 			projectName: this.projectName,
 		};
 	}

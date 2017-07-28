@@ -5,7 +5,7 @@ import {ImageUploadPassingVar, UploadService} from "./";
 export function passOptionsToPackage(uploader: UploadService): Handler {
 	return function (req: Request, res: Response, next: NextFunction) {
 		const g = new GlobalVariable(res);
-		g.set(ImageUploadPassingVar, uploader._pass());
+		g.set(ImageUploadPassingVar, uploader.passToClient());
 		next();
 	};
 }
