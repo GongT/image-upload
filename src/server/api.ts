@@ -97,6 +97,21 @@ router.get('/complete-upload', (req, res, next) => {
 	});
 });
 
+router.get('/fetch-file', (req, res, next) => {
+	if (!req.query.id) {
+		return next(new Error('require param `id`'));
+	}
+	uploadItemsModel.getById(req.query.id).then((fileObject) => {
+		const data: FilePropertiesClient = Object.assign({}, fileObject.toObject(), {
+			holders: fileObject.holders.length,
+		});
+		res.send({
+			status: 0,
+			file: data,
+		});
+	}, next);
+});
+
 router.post('/hold-file', (req, res, next) => {
 	if (hold_release_check(req, next)) {
 		return;

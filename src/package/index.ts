@@ -263,9 +263,20 @@ export class UploadService {
 	
 	api(method: string, uri: string, params?: any, _options: any = {}) {
 		let req;
+		let requestHeaders: any = {};
 		if (!/^https?:\/\//.test(uri)) {
 			uri = this.requestUrl + 'api/' + noSlashStart(uri);
+			requestHeaders = {
+				'X-Image-Login-Token': this.userToken,
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+				'X-Image-Upload-Debug': this.debug? 'yes' : '',
+			};
 		}
+		if (_options.headers) {
+			Object.assign(requestHeaders, _options.headers);
+		}
+		
 		method = method.toLowerCase();
 		if (params) {
 			if (method === 'post') {
@@ -286,12 +297,7 @@ export class UploadService {
 			}
 		}
 		
-		req.headers = Object.assign({
-			'X-Image-Login-Token': this.userToken,
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-			'X-Image-Upload-Debug': this.debug? 'yes' : '',
-		}, _options.headers);
+		req.headers = requestHeaders;
 		if (!req.credentials) {
 			req.credentials = 'same-origin';
 		}
