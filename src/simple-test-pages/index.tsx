@@ -1,5 +1,5 @@
-import {UploadService} from "@gongt/file-upload-client/index";
-import {sha256_file} from "@gongt/file-upload-client/sha256_extra";
+import {UploadService} from "@gongt/image-uploader/index";
+import {sha256_file} from "@gongt/image-uploader/sha256_extra";
 import * as React from "react";
 import {render} from "react-dom";
 import {BlockDisplay} from "./block-display";

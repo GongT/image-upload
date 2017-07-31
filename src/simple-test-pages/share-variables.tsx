@@ -1,5 +1,5 @@
-import {UploadService} from "@gongt/file-upload-client/index";
-import {FileProperties, SignResult} from "@gongt/file-upload-client/public-define";
+import {UploadService} from "@gongt/image-uploader/index";
+import {FileProperties, SignResult} from "@gongt/image-uploader/public-define";
 import * as React from "react";
 
 export interface TestingContext {
